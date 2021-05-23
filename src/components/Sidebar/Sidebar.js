@@ -247,28 +247,6 @@ export default function Sidebar() {
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/attendance/Handler") !== -1
-                      ? "text-blue-500 hover:text-blue-600"
-                      : "text-gray-800 hover:text-gray-600")
-                  }
-                  to="/attendance/Handler"
-                >
-                  <i
-                    className={
-                      "fas fa-calendar-alt mr-2 text-sm " +
-                      (window.location.href.indexOf("/attendance/Handler") !== -1
-                        ? "opacity-75"
-                        : "text-gray-400")
-                    }
-                  ></i>{" "}
-                  Ingresar
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/attendance/Justify") !== -1
                       ? "text-blue-500 hover:text-blue-600"
                       : "text-gray-800 hover:text-gray-600")
@@ -286,29 +264,6 @@ export default function Sidebar() {
                   Justificar
                 </Link>
               </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/attendance/Admin") !== -1
-                      ? "text-blue-500 hover:text-blue-600"
-                      : "text-gray-800 hover:text-gray-600")
-                  }
-                  to="/attendance/Admin"
-                >
-                  <i
-                    className={
-                      "fas fa-tools mr-2 text-sm " +
-                      (window.location.href.indexOf("/attendance/Admin") !== -1
-                        ? "opacity-75"
-                        : "text-gray-400")
-                    }
-                  ></i>{" "}
-                  Administrar
-                </Link>
-              </li>
-
             </ul>
 
             {/* Divider */}

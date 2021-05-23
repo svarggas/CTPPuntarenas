@@ -21,8 +21,6 @@ import CommunicationMessage from "views/comunication/Message.js";
 import CommunicationReply from "views/comunication/Reply.js";
 import CommunicationSearch from "views/comunication/Search.js";
 
-import AttendanceAdmin from "views/attendance/Admin.js";
-import AttendanceHandler from "views/attendance/Handler.js";
 import AttendanceJustify from "views/attendance/Justify.js";
 
 import PrivilegesAdd from "views/privileges/Add.js";
@@ -31,45 +29,60 @@ import PrivilegesHandler from "views/privileges/Handler.js";
 import ReportList from "views/reports/index.js";
 import Report from "views/reports/Report.js";
 
-const namePage = 'Name Page';
+import getPageName from "components/PageName/PageName"
+class Authenticated extends React.Component {
 
-export default function Authenticated() {
-  return (
-    <>
-      <Sidebar />
-      <div className="relative md:ml-64 bg-gray-200">
-        <Header name={ namePage } />
-        <div className="px-4 md:px-10 mx-auto w-full -m-24">
-          <Switch>
+  constructor(){
+    super();
+    this.state = { pageName: '' };
+  }
 
-            <Route path="/home/" exact component={Home} />
-            <Route path="/home/ChangePassword" exact component={ChangePassword} />
-            
-            <Route path="/users/List" exact component={UserList} />
-            <Route path="/users/Add" exact component={UserAdd} />
-            <Route path="/users/Handler" exact component={UserHandler} />
+  componentDidMount(){
+    this.setState({pageName: getPageName()})
+  }
 
-            <Route path="/comunication/Compose" exact component={CommunicationCompose} />
-            <Route path="/comunication/Deleted" exact component={CommunicationDeleted} />
-            <Route path="/comunication/Inbox" exact component={CommunicationInbox} />
-            <Route path="/comunication/Message" exact component={CommunicationMessage} />
-            <Route path="/comunication/Reply" exact component={CommunicationReply} />
-            <Route path="/comunication/Search" exact component={CommunicationSearch} />
+  componentDidUpdate(prevProps, prevState){
+    const newName = getPageName()
+    if(newName !== prevState.pageName) this.setState({pageName: getPageName()})
+  }
 
-            <Route path="/attendance/Admin" exact component={AttendanceAdmin} />
-            <Route path="/attendance/Handler" exact component={AttendanceHandler} />
-            <Route path="/attendance/Justify" exact component={AttendanceJustify} />
+  render() {
+    return (
+      <>
+        <Sidebar />
+        <div className="relative md:ml-64 bg-gray-200">
+          <Header name={ this.state.pageName } />
+          <div className="px-4 md:px-10 mx-auto w-full -m-24">
+            <Switch>
 
-            <Route path="/privileges/Add" exact component={PrivilegesAdd} />
-            <Route path="/privileges/Handler" exact component={PrivilegesHandler} />
+              <Route path="/home/" exact component={Home} />
+              <Route path="/home/ChangePassword" exact component={ChangePassword} />
+              
+              <Route path="/users/List" exact component={UserList} />
+              <Route path="/users/Add" exact component={UserAdd} />
+              <Route path="/users/Handler" exact component={UserHandler} />
 
-            <Route path="/reports/List" exact component={ReportList} />
-            <Route path="/reports/Report" exact component={Report} />
-            
-          </Switch>
-          <FooterAdmin />
+              <Route path="/comunication/Compose" exact component={CommunicationCompose} />
+              <Route path="/comunication/Deleted" exact component={CommunicationDeleted} />
+              <Route path="/comunication/Inbox" exact component={CommunicationInbox} />
+              <Route path="/comunication/Message" exact component={CommunicationMessage} />
+              <Route path="/comunication/Reply" exact component={CommunicationReply} />
+              <Route path="/comunication/Search" exact component={CommunicationSearch} />
+
+              <Route path="/attendance/Justify" exact component={AttendanceJustify} />
+
+              <Route path="/privileges/Add" exact component={PrivilegesAdd} />
+              <Route path="/privileges/Handler" exact component={PrivilegesHandler} />
+
+              <Route path="/reports/List" exact component={ReportList} />
+              <Route path="/reports/Report" exact component={Report} />
+              
+            </Switch>
+            <FooterAdmin />
+          </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+  )}
 }
+
+export default Authenticated
