@@ -1,7 +1,44 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useHistory } from "react-router-dom";
+import axios from 'axios';
+import SharedContext from "../../SharedContext";
 
-export default function Login() {
+const LogIn = props => {
+
+  const { user, setUser } = useContext(SharedContext)
+  const history = useHistory()
+  
+  const userLogIn = async () => {
+    const domain = user.apiURL,
+      endpoint = 'user/login',
+      email = (document.querySelector('#userEmail')).value,
+      password = (document.querySelector('#userPassword')).value;
+
+    try {
+
+      const loginUser = await axios({
+        method: 'POST',
+        url: `${user.apiURL}/${endpoint}`,
+        data: {
+          email,
+          password
+        }
+      });
+
+      setUser({
+        "apiURL": domain,
+        "data": loginUser.data.userData._doc,
+        "token": loginUser.data.userData.token
+      })
+
+      history.push('/home/')
+      
+    } catch (error) {
+      alert("Algo salio mal")
+    }
+
+  }
+
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -28,6 +65,8 @@ export default function Login() {
                       type="email"
                       className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                       placeholder="Email"
+                      id="userEmail"
+                      name="userEmail"
                     />
                   </div>
 
@@ -42,25 +81,16 @@ export default function Login() {
                       type="password"
                       className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                       placeholder="Password"
+                      id="userPassword"
+                      name="userPassword"
                     />
-                  </div>
-                  <div>
-                    <label className="inline-flex items-center cursor-pointer">
-                      <input
-                        id="customCheckLogin"
-                        type="checkbox"
-                        className="form-checkbox text-gray-800 ml-1 w-5 h-5 ease-linear transition-all duration-150"
-                      />
-                      <span className="ml-2 text-sm font-semibold text-gray-700">
-                        Recordame
-                      </span>
-                    </label>
                   </div>
 
                   <div className="text-center mt-6">
                     <button
                       className="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                       type="button"
+                      onClick={() => userLogIn()}
                     >
                       Ingresar
                     </button>
@@ -84,3 +114,5 @@ export default function Login() {
     </>
   );
 }
+
+export default LogIn

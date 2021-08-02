@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 // layouts
@@ -7,17 +7,25 @@ import NotAuthenticated from "layouts/NotAuthenticated.js";
 import Utilities from "layouts/Utilities.js";
 
 // views without layouts
-import Landing from "views/landing/index.js";
+import Landing from "views/landing/index.js"; 
 import Lost from "views/Lost.js";
 
-class App extends React.Component {
+import SharedContext from './SharedContext';
 
-  render() {
-    return (
-        <BrowserRouter>
-            <Switch>
+const App = () => {
+
+  const [ user, setUser ] = useState({
+    "apiURL": "https://ctp-puntarenas-api.herokuapp.com/api"
+  })
+  const value = useMemo(() => ({ user, setUser }), [user, setUser])
+
+  return (
+    <SharedContext.Provider value={value} >
+      <BrowserRouter>
+        <Switch>
+      
             {/* add routes with layouts */}
-            <Route path="/attendance" component={Authenticated}  />
+            <Route path="/attendance" component={Authenticated} />
             <Route path="/comunication" component={Authenticated} />
             <Route path="/home" component={Authenticated} />
             <Route path="/privileges" component={Authenticated} />
@@ -33,10 +41,11 @@ class App extends React.Component {
             {/* add redirect to Lost if 404 or not especified */}
             <Route from="*" to="/Lost" component={Lost} />
 
-            </Switch>
-        </BrowserRouter>
-    );
-  }
+        </Switch>
+      </BrowserRouter>
+    </SharedContext.Provider>
+  );
+
 }
 
-export default App;
+export default App
