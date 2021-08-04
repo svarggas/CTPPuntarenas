@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import NotificationDropdown from "components/Dropdowns/NotificationDropdown.js";
 import UserDropdown from "components/Dropdowns/UserDropdown.js";
 
-export default function Sidebar() {
-  const [collapseShow, setCollapseShow] = React.useState("hidden");
+const SideBar = props => {
+
+  console.log(props)
+  const [collapseShow, setCollapseShow] = useState("hidden");
+
   return (
     <>
       <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-no-wrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
@@ -370,7 +373,7 @@ export default function Sidebar() {
               </li>
 
               <li className="items-center">
-                <button type="button"
+                <button type="button" onClick={() => props.logout()}
                   className={ "text-xs uppercase py-3 font-bold block text-gray-800 hover:text-gray-600" } >
                   <i
                     className={ "fas fa-sign-out-alt mr-2 text-sm text-gray-400" }
@@ -387,3 +390,5 @@ export default function Sidebar() {
     </>
   );
 }
+
+export default SideBar

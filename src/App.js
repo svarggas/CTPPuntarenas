@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 // layouts
 import Authenticated from "layouts/Authenticated.js";
 import NotAuthenticated from "layouts/NotAuthenticated.js";
 import Utilities from "layouts/Utilities.js";
+import jwtDecode from 'jwt-decode';
 
 // views without layouts
 import Landing from "views/landing/index.js"; 
@@ -14,9 +15,28 @@ import SharedContext from './SharedContext';
 
 const App = () => {
 
-  const [ user, setUser ] = useState({
-    "apiURL": "https://ctp-puntarenas-api.herokuapp.com/api"
-  })
+  const handleSession = () => {
+
+    const localToken = localStorage.getItem('uid');
+    let returnValue = {
+      apiURL: "https://ctp-puntarenas-api.herokuapp.com/api",
+      data: {},
+      logged: false
+    }
+
+    if (localToken) {
+      const decodedData = jwtDecode(localToken);
+      returnValue = {
+        apiURL: "https://ctp-puntarenas-api.herokuapp.com/api",
+        data: decodedData.user,
+        logged: true
+      }
+    }
+    return returnValue
+
+  }
+
+  const [ user, setUser ] = useState(handleSession())
   const value = useMemo(() => ({ user, setUser }), [user, setUser])
 
   return (

@@ -1,43 +1,48 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import axios from 'axios';
 import SharedContext from "../../SharedContext";
 
-const LogIn = props => {
+const LogIn = () => {
 
   const { user, setUser } = useContext(SharedContext)
   const history = useHistory()
   
   const userLogIn = async () => {
-    const domain = user.apiURL,
-      endpoint = 'user/login',
-      email = (document.querySelector('#userEmail')).value,
-      password = (document.querySelector('#userPassword')).value;
+    if (!user.logged){
 
-    try {
+      const domain = user.apiURL,
+        endpoint = 'user/login',
+        email = (document.querySelector('#userEmail')).value,
+        password = (document.querySelector('#userPassword')).value;
 
-      const loginUser = await axios({
-        method: 'POST',
-        url: `${user.apiURL}/${endpoint}`,
-        data: {
-          email,
-          password
-        }
-      });
+      try {
+        const loginUser = await axios({
+          method: 'POST',
+          url: `${user.apiURL}/${endpoint}`,
+          data: {
+            email,
+            password
+          }
+        });
 
-      setUser({
-        "apiURL": domain,
-        "data": loginUser.data.userData._doc,
-        "token": loginUser.data.userData.token
-      })
-
-      history.push('/home/')
-      
-    } catch (error) {
-      alert("Algo salio mal")
+        localStorage.setItem('uid', loginUser.data.userData.token)
+        await setUser({
+          "apiURL": domain,
+          "data": loginUser.data.userData._doc,
+          "token": loginUser.data.userData.token
+        })
+        
+      } catch (error) {
+        alert("Algo salio mal")
+      }
     }
-
+    history.push('/home/');
   }
+
+  useEffect(() => {
+    if (user.logged) history.push('/home/');
+  }, [])
 
   return (
     <>

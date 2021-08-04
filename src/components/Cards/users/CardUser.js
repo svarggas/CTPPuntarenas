@@ -1,14 +1,19 @@
-import React from "react";
-
-// components
+import React, { useContext } from "react";
+import SharedContext from "../../../SharedContext";
 
 export default function CardUser() {
+
+  const { user } = useContext(SharedContext)
+  console.log(user)
+
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-200 border-0">
         <div className="rounded-t bg-white mb-0 px-6 py-6">
           <div className="text-center flex justify-between">
-            <h6 className="text-gray-800 text-xl font-bold">Maria Malena Gonzalez Ramiréz</h6>
+            <h6 className="text-gray-800 text-xl font-bold">
+              { user.data.name }
+            </h6>
             <button
               className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
               type="button"
@@ -34,7 +39,8 @@ export default function CardUser() {
                   <input
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                    id="user" name="user"
+                    id="user" name="user" readOnly
+                    defaultValue={ user.data.user ? user.data.user : "" }
                   />
                 </div>
               </div>
@@ -50,6 +56,7 @@ export default function CardUser() {
                     type="email"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     id="identification" name="identification"
+                    defaultValue={ user.data.identification ? user.data.identification : "" }
                   />
                 </div>
               </div>
@@ -65,6 +72,7 @@ export default function CardUser() {
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     id="name" name="name"
+                    defaultValue={ user.data.name ? user.data.name : "" }
                   />
                 </div>
               </div>
@@ -88,6 +96,7 @@ export default function CardUser() {
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     id="address" name="address"
+                    defaultValue={ user.data.address ? user.data.address : "" }
                   />
                 </div>
               </div>
@@ -103,6 +112,7 @@ export default function CardUser() {
                     type="email"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     id="cellphone" name="cellphone"
+                    defaultValue={ user.data.cellphone ? user.data.cellphone : "" }
                   />
                 </div>
               </div>
@@ -118,6 +128,7 @@ export default function CardUser() {
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     id="telephone" name="telephone"
+                    defaultValue={ user.data.telephone ? user.data.telephone : "" }
                   />
                 </div>
               </div>
@@ -133,6 +144,7 @@ export default function CardUser() {
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     id="email" name="email"
+                    defaultValue={ user.data.email ? user.data.email : "" }
                   />
                 </div>
               </div>
@@ -156,6 +168,7 @@ export default function CardUser() {
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     rows="4" id="notes" name="notes"
+                    defaultValue={ user.data.comment ? user.data.comment : "" }
                   ></textarea>
                 </div>
               </div>
