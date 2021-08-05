@@ -6,7 +6,6 @@ import UserDropdown from "components/Dropdowns/UserDropdown.js";
 
 const SideBar = props => {
 
-  console.log(props)
   const [collapseShow, setCollapseShow] = useState("hidden");
 
   return (

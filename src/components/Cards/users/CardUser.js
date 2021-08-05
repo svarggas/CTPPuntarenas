@@ -1,10 +1,74 @@
+import axios from "axios";
 import React, { useContext } from "react";
+import jwtDecode from 'jwt-decode';
 import SharedContext from "../../../SharedContext";
 
-export default function CardUser() {
+const CardUser = () => {
 
-  const { user } = useContext(SharedContext)
-  console.log(user)
+  const { user, setUser } = useContext(SharedContext)
+
+  const updateUser = async () => {
+
+    const button = document.getElementById('btnUpdate')
+    button.disabled = true
+    button.classList.remove('bg-blue-500');
+    button.classList.add('bg-gray-900');
+
+    const _user = user.data.user,
+      identification = document.getElementById('identification').value,
+      name = document.getElementById('name').value,
+      address = document.getElementById('address').value,
+      cellphone = document.getElementById('cellphone').value,
+      telephone = document.getElementById('telephone').value,
+      email = document.getElementById('email').value,
+      notes = document.getElementById('notes').value
+
+    try {
+      const endpoint = `functionary/update/${user.data._id}`
+      const newUserData = await axios({
+        method: 'PUT',
+        url: `${user.apiURL}/${endpoint}`,
+        data: {
+          user: _user,
+          identification: identification,
+          name: name,
+          address: address,
+          cellphone: cellphone,
+          telephone: telephone,
+          email: email,
+          other: notes
+        }
+      });
+
+      await updateUserSession(newUserData.data);
+
+      button.disabled = false
+      button.classList.add('bg-blue-500');
+      button.classList.remove('bg-gray-900');
+
+      alert('Información actualizada');
+      
+    } catch (error) {
+      alert("Algo salio mal")
+    }
+  }
+
+  const updateUserSession = async data => {
+
+    localStorage.removeItem('uid')
+    localStorage.setItem('uid', data.token)
+
+    const localToken = localStorage.getItem('uid')
+    const domain = user.apiURL
+    const decodedData = jwtDecode(localToken)
+
+    await setUser({
+      "apiURL": domain,
+      "data": decodedData.user,
+      "logged": true
+    })
+
+  }
 
   return (
     <>
@@ -16,7 +80,7 @@ export default function CardUser() {
             </h6>
             <button
               className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-              type="button"
+              type="button" onClick={() => updateUser()} id="btnUpdate" name="btnUpdate"
             >
               Actualizar
             </button>
@@ -32,7 +96,7 @@ export default function CardUser() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="user"
                   >
                     Usuario
                   </label>
@@ -48,7 +112,7 @@ export default function CardUser() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="identification"
                   >
                     Cédula
                   </label>
@@ -64,7 +128,7 @@ export default function CardUser() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="name"
                   >
                     Nombre completo
                   </label>
@@ -88,7 +152,7 @@ export default function CardUser() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="address"
                   >
                     Dirección
                   </label>
@@ -104,7 +168,7 @@ export default function CardUser() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="cellphone"
                   >
                     Celular
                   </label>
@@ -120,7 +184,7 @@ export default function CardUser() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="telephone"
                   >
                     Teléfono de casa
                   </label>
@@ -136,7 +200,7 @@ export default function CardUser() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="email"
                   >
                     Correo electrónico
                   </label>
@@ -160,7 +224,7 @@ export default function CardUser() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="notes"
                   >
                     Mis apuntes
                   </label>
@@ -168,7 +232,7 @@ export default function CardUser() {
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     rows="4" id="notes" name="notes"
-                    defaultValue={ user.data.comment ? user.data.comment : "" }
+                    defaultValue={ user.data.other ? user.data.other : "" }
                   ></textarea>
                 </div>
               </div>
@@ -179,3 +243,5 @@ export default function CardUser() {
     </>
   );
 }
+
+export default CardUser
