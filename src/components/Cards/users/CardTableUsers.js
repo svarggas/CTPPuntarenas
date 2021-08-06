@@ -1,17 +1,37 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import axios from "axios"
+import SharedContext from "../../../SharedContext";
 
-export default function CardTable({ color }) {
+const CardTable = ({ color }) => {
 
+  const history = useHistory();
   const urlParams = new URLSearchParams(window.location.search);
 
-  function getNextLocation() {
+  const getNextLocation = username => {
     let location, next = urlParams.get("s");
-    if (next === 'users') location = 'Handler';
-    if (next === 'privileges') location = '../privileges/Handler';
+    if (next === 'users') history.push({ pathname: 'Handler', search:`?user=${username}` })
+    if (next === 'privileges') history.push({ pathname: '../privileges/Handler', search: `?user=${username}`})
     return location
   }
+
+  const { user } = useContext(SharedContext)
+  const [ userList, setUserList ] = useState([])
+  const loadUsers = async () => {
+    try {
+      const endpoint = `functionary/getList/all`
+      const list = await axios({
+        method: 'GET',
+        url: `${user.apiURL}/${endpoint}`
+      });
+      setUserList(list.data.User)
+    } catch (error) {
+      alert("Algo salio mal")
+    }
+  }
+
+  useEffect(() => { loadUsers() }, [])
 
   return (
     <>
@@ -81,31 +101,40 @@ export default function CardTable({ color }) {
             </thead>
 
             <tbody>
-              <tr>
-                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-no-wrap p-4 text-left items-center">
-                  <span
-                    className={
-                      "ml-3 font-bold " +
-                      +(color === "light" ? "text-gray-700" : "text-white")
-                    }
-                  >
-                    Vargas Rojas Sebastián 
-                  </span>
-                </th>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-no-wrap p-4">
-                  1-1726-0605
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-no-wrap p-4">
-                  <i className="fas fa-circle text-green-500 mr-2"></i> Activo
-                </td>
-                <td className="px-6 align-middle text-sm whitespace-no-wrap p-4 text-center">
-                    <Link to={getNextLocation()}
-                      className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
-                    >
-                      <i className="fas fa-arrow-right"></i>
-                    </Link>
-                </td>
-              </tr>
+
+              { 
+                userList.map( mappedUser => {
+                  return (
+                    <tr>
+                      <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-no-wrap p-4 text-left items-center">
+                        <span
+                          className={
+                            "ml-3 font-bold " +
+                            +(color === "light" ? "text-gray-700" : "text-white")
+                          }
+                        >
+                          { mappedUser.name }
+                        </span>
+                      </th>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-no-wrap p-4">
+                        { mappedUser.identification }
+                      </td>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-no-wrap p-4">
+                        <i className={ (mappedUser.status ? "text-green-500" : "text-red-500") + " fas fa-circle mr-2"}></i> 
+                        { mappedUser.status ? 'Activo' : 'Inactivo'}
+                      </td>
+                      <td className="px-6 align-middle text-sm whitespace-no-wrap p-4 text-center">
+                          <button onClick={ () => getNextLocation(mappedUser.user) }
+                            className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 border rounded-full"
+                          >
+                            <i className="fas fa-arrow-right"></i>
+                          </button>
+                      </td>
+                    </tr>
+                  )
+                })
+              }
+
             </tbody>
           </table>
         </div>
@@ -121,3 +150,5 @@ CardTable.defaultProps = {
 CardTable.propTypes = {
   color: PropTypes.oneOf(["light", "dark"]),
 };
+
+export default CardTable
