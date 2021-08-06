@@ -1,32 +1,140 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useLocation, useHistory } from "react-router-dom";
+import axios from 'axios';
+import SharedContext from "../../../SharedContext";
 
-// components
+const CardUserPriv = () => {
 
-export default function CardUserPriv() {
+  const history = useHistory()
+  const userHandled = new URLSearchParams(useLocation().search).get('user');
+  const { user } = useContext(SharedContext)
+
+  const [ userData, setUserData] = useState({})
+  const loadUser = async () => {
+    try {
+      const endpoint = `functionary/getList/${userHandled}`
+      const data = await axios({
+        method: 'GET',
+        url: `${user.apiURL}/${endpoint}`
+      });
+      setUserData(data.data.User[0])
+    } catch (error) {
+      alert("Algo salio mal")
+    }
+  }
+
+  const updateUser = async () => {
+
+    const button = document.getElementById('btnUpdate')
+    button.disabled = true
+    button.classList.remove('bg-blue-500');
+    button.classList.add('bg-gray-900');
+
+    const _user = userData.user,
+      identification = document.getElementById('identification').value,
+      name = document.getElementById('name').value,
+      address = document.getElementById('address').value,
+      cellphone = document.getElementById('cellphone').value,
+      telephone = document.getElementById('telephone').value,
+      email = document.getElementById('email').value,
+      comments = document.getElementById('comments').value
+
+    try {
+      const endpoint = `functionary/update/${user.data._id}`
+      await axios({
+        method: 'PUT',
+        url: `${user.apiURL}/${endpoint}`,
+        data: {
+          user: _user,
+          identification: identification,
+          name: name,
+          address: address,
+          cellphone: cellphone,
+          telephone: telephone,
+          email: email,
+          comments: comments
+        }
+      });
+
+      button.disabled = false
+      button.classList.add('bg-blue-500');
+      button.classList.remove('bg-gray-900');
+
+      alert('Información actualizada');
+      
+    } catch (error) {
+      alert("Algo salio mal")
+    }
+  }
+
+  const changeStatus = async () => {
+
+    let newStatus = null
+    userData.status ? newStatus = false : newStatus = true
+
+    try {
+      const endpoint = `functionary/updateStatus/${userData._id}`
+      await axios({
+        method: 'PUT',
+        url: `${user.apiURL}/${endpoint}`,
+        data: {
+          status: newStatus
+        }
+      });
+
+      alert("El estado del usario se cambio con exito")
+      
+    } catch (error) {
+      alert("Algo salio mal")
+    }
+
+  }
+
+  const deleteUser = async () => {
+
+    try {
+      const endpoint = `functionary/delete/${userData._id}`
+      await axios({
+        method: 'DELETE',
+        url: `${user.apiURL}/${endpoint}`
+      });
+      history.push({
+        pathname: '/users/List',
+        search: '?s=users'
+      })
+
+    } catch (error) {
+      alert("Algo salio mal")
+    }
+
+  }
+
+  useEffect(() => { loadUser() }, [updateUser, changeStatus])
+
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-200 border-0">
         <div className="rounded-t bg-white mb-0 px-6 py-6">
           <div className="text-center flex justify-between">
             <h6 className="text-gray-800 text-xl font-bold">
-                <i className="fas fa-circle text-green-500 mr-2"></i> Maria Malena Gonzalez Ramiréz
+              <i className={ (userData.status ? "text-green-500" : "text-red-500") + " fas fa-circle mr-2"}></i> { userData.name }
             </h6>
             <div>
              <button
-                    className="bg-green-500 text-white active:bg-green-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                    type="button">
-                    Actualizar
-                </button>
-                <button
-                    className="bg-blue-600 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                    type="button">
-                    Inactivar
-                </button>
-                <button
-                    className="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                    type="button">
-                    Eliminar
-                </button>
+                className="bg-green-500 text-white active:bg-green-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                type="button" onClick={ () => updateUser() } id="btnUpdate" name="btnUpdate" >
+                Actualizar
+              </button>
+              <button
+                className="bg-blue-600 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                type="button" onClick={ () => changeStatus() } >
+                Cambiar estado
+              </button>
+              <button
+                className="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                type="button" onClick={ () => deleteUser() } >
+                Eliminar
+              </button>
             </div>
           </div>
         </div>
@@ -40,14 +148,14 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="user"
                   >
                     Usuario
                   </label>
                   <input
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                    id="user" name="user"
+                    id="user" name="user" defaultValue={ userData.user } readOnly
                   />
                 </div>
               </div>
@@ -55,14 +163,14 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="identification"
                   >
                     Cédula
                   </label>
                   <input
                     type="email"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                    id="identification" name="identification"
+                    id="identification" name="identification" defaultValue={ userData.identification }
                   />
                 </div>
               </div>
@@ -70,14 +178,14 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="name"
                   >
-                    Nombre compelto
+                    Nombre completo
                   </label>
                   <input
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                    id="name" name="name"
+                    id="name" name="name" defaultValue={ userData.name }
                   />
                 </div>
               </div>
@@ -93,14 +201,14 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="address"
                   >
                     Dirección
                   </label>
                   <input
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                    id="address" name="address"
+                    id="address" name="address" defaultValue={ userData.address }
                   />
                 </div>
               </div>
@@ -108,14 +216,14 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="cellphone"
                   >
                     Celular
                   </label>
                   <input
                     type="email"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                    id="cellphone" name="cellphone"
+                    id="cellphone" name="cellphone" defaultValue={ userData.cellphone }
                   />
                 </div>
               </div>
@@ -123,14 +231,14 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="telephone"
                   >
                     Teléfono de casa
                   </label>
                   <input
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                    id="telephone" name="telephone"
+                    id="telephone" name="telephone" defaultValue={ userData.telephone }
                   />
                 </div>
               </div>
@@ -138,14 +246,14 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="email"
                   >
                     Correo electrónico
                   </label>
                   <input
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                    id="email" name="email"
+                    id="email" name="email" defaultValue={ userData.email }
                   />
                 </div>
               </div>
@@ -161,14 +269,14 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="comments"
                   >
                     Otra información importante
                   </label>
                   <textarea
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                    rows="4" id="otro" name="otro"
+                    rows="4" id="comments" name="comments" defaultValue={ userData.comments }
                   ></textarea>
                 </div>
               </div>
@@ -179,3 +287,5 @@ export default function CardUserPriv() {
     </>
   );
 }
+
+export default CardUserPriv

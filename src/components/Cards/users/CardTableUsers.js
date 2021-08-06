@@ -105,7 +105,7 @@ const CardTable = ({ color }) => {
               { 
                 userList.map( mappedUser => {
                   return (
-                    <tr>
+                    <tr key={mappedUser.user} >
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-no-wrap p-4 text-left items-center">
                         <span
                           className={

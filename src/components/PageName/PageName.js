@@ -1,5 +1,7 @@
 export default () => {
-    const pathLocation = window.location.pathname + window.location.search;
+
+    let pathLocation = window.location.pathname + window.location.search;
+    
     switch (pathLocation) {
         // Home
         case "/home/":
@@ -31,14 +33,18 @@ export default () => {
         // Privileges
         case "/users/List?s=privileges":
             return "Privilegios, listado de funcionarios";
-        case "/privileges/Handler":
+        case "/privileges/Handler" :
             return "Privilegios relacionados al funcionario";
         case "/privileges/Add":
             return "Agregar privilegios al funcionario";
         // Change Password
         case "/home/ChangePassword":
             return "Cambiar contraseña";
-        default:
+        default: {
+            // With queryString params
+            if (pathLocation.match("/users/Handler")[0] === "/users/Handler") return "Edición de usuario"
+            if (pathLocation.match("/privileges/Handler")[0] === "/privileges/Handler") return "Privilegios relacionados al usuario"
             return "-"
+        }
     }
 }

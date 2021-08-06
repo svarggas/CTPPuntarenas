@@ -34,7 +34,7 @@ import SharedContext from "../SharedContext";
 
 const Authenticated = () => {
 
-  const { user, setUser } = useContext(SharedContext);
+  const { setUser } = useContext(SharedContext);
   const history = useHistory()
 
   const logout = () => {
