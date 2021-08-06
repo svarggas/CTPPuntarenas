@@ -12,7 +12,7 @@ const CardTable = ({ color }) => {
   const getNextLocation = username => {
     let location, next = urlParams.get("s");
     if (next === 'users') history.push({ pathname: 'Handler', search:`?user=${username}` })
-    if (next === 'privileges') history.push({ pathname: '../privileges/Handler', search: `?user=${username}`})
+    if (next === 'privileges') history.push({ pathname: '/privileges/Handler', search: `?user=${username}`})
     return location
   }
 
