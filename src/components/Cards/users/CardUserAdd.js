@@ -1,8 +1,57 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
+import SharedContext from "../../../SharedContext";
+import axios from "axios";
 
-// components
+const CardUserPriv = () => {
 
-export default function CardUserPriv() {
+  const history = useHistory();
+  const { user } = useContext(SharedContext)
+
+  const createUser = async () => {
+
+    const _user = document.getElementById('user').value,
+      identification = document.getElementById('identification').value,
+      name = document.getElementById('name').value,
+      address = document.getElementById('address').value,
+      cellphone = document.getElementById('cellphone').value,
+      telephone = document.getElementById('telephone').value,
+      email = document.getElementById('email').value,
+      other = document.getElementById('other').value
+  
+    try {
+      const endpoint = `user/register`
+      await axios({
+        method: 'POST',
+        url: `${user.apiURL}/${endpoint}`,
+        data: {
+          user: _user,
+          password: _user,
+          identification: identification,
+          name: name,
+          address: address,
+          cellphone: cellphone,
+          telephone: telephone,
+          email: email,
+          status: true,
+          comments: "-",
+          other: other,
+          free_day: 1
+        }
+      });
+  
+      alert('Usuario creado');
+  
+      history.push({
+        pathname: '/users/List',
+        search: '?s=users'
+      })
+      
+    } catch (error) {
+      alert("Algo salio mal")
+    }
+  }
+
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-200 border-0">
@@ -14,7 +63,7 @@ export default function CardUserPriv() {
             <div>
                 <button
                     className="bg-green-500 text-white active:bg-green-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                    type="button">
+                    type="button" onClick={() => createUser()} >
                     Agregar
                 </button>
             </div>
@@ -30,7 +79,7 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="user"
                   >
                     Usuario
                   </label>
@@ -39,13 +88,16 @@ export default function CardUserPriv() {
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     id="user" name="user"
                   />
+                  <span className="placeholder-gray-400 text-xs" >
+                    * El usuario ingresado funcionará como contraseña hasta que el usuario la cambie
+                  </span>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="identification"
                   >
                     Cédula
                   </label>
@@ -60,7 +112,7 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="name"
                   >
                     Nombre compelto
                   </label>
@@ -83,7 +135,7 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="address"
                   >
                     Dirección
                   </label>
@@ -98,7 +150,7 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="cellphone"
                   >
                     Celular
                   </label>
@@ -113,7 +165,7 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="telephone"
                   >
                     Teléfono de casa
                   </label>
@@ -128,7 +180,7 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="email"
                   >
                     Correo electrónico
                   </label>
@@ -151,14 +203,14 @@ export default function CardUserPriv() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="other"
                   >
                     Otra información importante
                   </label>
                   <textarea
                     type="text"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                    rows="4" id="otro" name="otro"
+                    rows="4" id="other" name="other"
                   ></textarea>
                 </div>
               </div>
@@ -169,3 +221,5 @@ export default function CardUserPriv() {
     </>
   );
 }
+
+export default CardUserPriv
