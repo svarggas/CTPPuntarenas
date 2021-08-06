@@ -1,6 +1,52 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import axios from "axios"
+import SharedContext from "../../../SharedContext";
 
-export default function CardTable() {
+const CardTable = () => {
+
+    const { user } = useContext(SharedContext)
+    const [ userList, setUserList ] = useState([])
+
+    const loadUsers = async () => {
+      try {
+        const endpoint = `functionary/getList/all`
+        const list = await axios({
+          method: 'GET',
+          url: `${user.apiURL}/${endpoint}`
+        });
+        setUserList(list.data.User)
+      } catch (error) {
+        alert("Algo salio mal")
+      }
+    }
+  
+    useEffect(() => { loadUsers() }, [])
+
+    const justifyAbsence = async () => {
+    
+        const _user = document.getElementById('userToJustify').value,
+          date = document.getElementById('date').value,
+          description = document.getElementById('description').value
+
+        try {
+          const endpoint = `binnacle/justify/${user.data._id}`
+          const justify = await axios({
+            method: 'PUT',
+            url: `${user.apiURL}/${endpoint}`,
+            data: {
+              user: _user,
+              date: date,
+              justified_description: description,
+            }
+          });
+    
+          console.log(justify)
+          alert('Información actualizada');
+          
+        } catch (error) {
+          alert("Algo salio mal")
+        }
+    }
 
   return (
     <>
@@ -25,14 +71,14 @@ export default function CardTable() {
                             <select className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white 
                                 rounded text-sm shadow focus:outline-none focus:shadow-outline w-full 
                                 ease-linear transition-all duration-150"
-                                id="sendTo" name="sendTo">
-                                    <option value="">Seleccione un destinatario</option>
-                                    <optgroup label="Docentes">
-                                        <option value="">Juanita</option>
-                                    </optgroup>
-                                    <optgroup label="Funcionarios administrativos">
-                                        <option value="">Juanito</option>
-                                    </optgroup>
+                                id="userToJustify" name="userToJustify">
+                                    {
+                                        userList.map( mappedUser => {
+                                            return (
+                                                <option value={ mappedUser._id } key={ mappedUser.user } > { mappedUser.name } </option>
+                                            )
+                                        })
+                                    }
                             </select>
                         </div>
                     </div>
@@ -41,13 +87,13 @@ export default function CardTable() {
                         <div className="relative w-full mb-3">
                         <label
                             className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                            htmlFor="grid-password">
+                            htmlFor="date">
                             Fecha
                         </label>
                         <input
                             type="date"
                             className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                            id="affair" name="affair"/>
+                            id="date" name="date"/>
                         </div>
                     </div>
 
@@ -55,7 +101,7 @@ export default function CardTable() {
                         <div className="relative w-full mb-3">
                         <label
                             className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                            htmlFor="grid-password">
+                            htmlFor="description">
                             Descripción
                         </label>
                         <textarea
@@ -70,7 +116,7 @@ export default function CardTable() {
                         <div className="relative w-full mb-3 text-right">
                         <button type="button"
                             className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                            id="sendMessage" name="sendMessage"
+                            id="sendMessage" name="sendMessage" onClick={ () => justifyAbsence() }
                             >
                                 Enviar
                             </button>
@@ -85,3 +131,5 @@ export default function CardTable() {
     </>
   );
 }
+
+export default CardTable

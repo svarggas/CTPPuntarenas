@@ -22,13 +22,6 @@ export default function CardTable({ color }) {
         <div className="rounded-t mb-0 px-6 py-6">
           <div className="text-center flex justify-between">
             <h3 className="text-gray-100 text-xl font-bold">Bandeja</h3>
-            <div>
-                <Link to="Search"
-                className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                >
-                    Buscar
-                </Link>
-            </div>
           </div>
         </div>
 
