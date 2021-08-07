@@ -1,6 +1,58 @@
-import React from "react";
+import React, { useContext } from "react";
+import SharedContext from "../../SharedContext";
+import axios from "axios";
 
-export default function ChangePassword() {
+const ChangePassword = () => {
+
+  const { user } = useContext(SharedContext)
+
+  const changePassword = async () => {
+    
+    const currentPassword = document.getElementById('currentPassword').value,
+      newPassword = document.getElementById('newPassword').value,
+      newPasswordConfirm = document.getElementById('newPasswordConfirm').value
+
+    if(newPassword !== newPasswordConfirm) {
+
+      alert("La contraseña nueva y su confirmación no calzan")
+
+    } else {
+
+      if(currentPassword && newPassword && newPasswordConfirm) {
+
+        const button = document.getElementById('btnUpdate')
+        button.disabled = true
+        button.classList.remove('bg-blue-500');
+        button.classList.add('bg-gray-900');
+
+        try {
+          const endpoint = `user/changePassword`
+          const msgReturned = await axios({
+            method: 'PUT',
+            url: `${user.apiURL}/${endpoint}`,
+            data: {
+              userId: user.data._id,
+              password: newPassword
+            }
+          });
+
+          button.disabled = false
+          button.classList.add('bg-blue-500');
+          button.classList.remove('bg-gray-900');
+
+          alert(msgReturned.data);
+          
+        } catch (error) { alert("Algo salio mal") }
+
+      } else {
+
+        if(!currentPassword || !newPassword || !newPasswordConfirm) alert("Todos los datos deben ser ingresados")
+
+      }
+    }
+
+  }
+
   return (
     <>
       <div className="flex flex-wrap flex-col content-center">
@@ -21,12 +73,12 @@ export default function ChangePassword() {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
+                      htmlFor="currentPassword"
                     >
                       Contraseña actual
                     </label>
-                    <input
-                      type="password"
+                    <input 
+                      type="password" id="currentPassword" name="currentPassword"
                       className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     />
                   </div>
@@ -34,12 +86,12 @@ export default function ChangePassword() {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
+                      htmlFor="newPassword"
                     >
                       Contraseña nueva
                     </label>
                     <input
-                      type="password"
+                      type="password" id="newPassword" name="newPassword"
                       className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     />
                   </div>
@@ -47,20 +99,20 @@ export default function ChangePassword() {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
+                      htmlFor="newPasswordConfirm"
                     >
                       Confirmación de contraseña nueva
                     </label>
                     <input
-                      type="password"
+                      type="password" id="newPasswordConfirm" name="newPasswordConfirm"
                       className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     />
                   </div>
 
                   <div className="text-center mt-6">
                     <button
-                      className="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      type="button"
+                      className="bg-blue-900 text-white active:bg-blue-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
+                      type="button" id="btnUpdate" name="btnUpdate" onClick={() => changePassword()}
                     >
                       Cambiar contraseña
                     </button>
@@ -75,3 +127,5 @@ export default function ChangePassword() {
     </>
   );
 }
+
+export default ChangePassword

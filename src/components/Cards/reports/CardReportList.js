@@ -132,27 +132,6 @@ export default function CardTable({ color }) {
                     </td>
                 </tr>
 
-                <tr>
-                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-no-wrap p-4 text-left items-center">
-                        <span className={ "ml-3 font-bold" } >
-                            Lista de privilegios
-                        </span>
-                    </th>
-                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-no-wrap p-4 text-left items-center">
-                        Privilegios
-                    </th>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-no-wrap p-4">
-                        Lista con descripción de cada uno y funcionalidad en el sistema
-                    </td>
-                    <td className="px-6 align-middle p-4 text-center">
-                        <Link to="Report"
-                            className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
-                        >
-                            <i className="fas fa-arrow-right"></i>
-                        </Link>
-                    </td>
-                </tr>
-
             </tbody>
 
           </table>

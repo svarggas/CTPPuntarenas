@@ -26,22 +26,29 @@ const LogIn = () => {
           }
         });
 
-        localStorage.setItem('uid', loginUser.data.userData.token)
-        await setUser({
-          "apiURL": domain,
-          "data": loginUser.data.userData._doc,
-          "token": loginUser.data.userData.token
-        })
+        if(!loginUser.data.userData) alert(loginUser.data)
+        if(loginUser.data.userData && 
+          loginUser.data.userData._doc && 
+          !loginUser.data.userData._doc.status) alert("El usuario se encuentra inactivo")
+
+        if(loginUser.data.userData && loginUser.data.userData._doc && loginUser.data.userData._doc.status) {
+          localStorage.setItem('uid', loginUser.data.userData.token)
+          await setUser({
+            "apiURL": domain,
+            "data": loginUser.data.userData._doc,
+            "token": loginUser.data.userData.token
+          })
+          setTimeout(() => goTo('/home/'),1000);
+        }
         
-      } catch (error) {
-        alert("Algo salio mal")
-      }
+      } catch (error) { alert(error) }
     }
-    history.push('/home/');
   }
 
+  const goTo = path => history.push(path)
+
   useEffect(() => {
-    if (user.logged) history.push('/home/');
+    if (user.logged) goTo('/home/');
   }, [])
 
   return (
