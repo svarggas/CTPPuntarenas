@@ -1,6 +1,41 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { Link, useHistory } from "react-router-dom";
+import axios from "axios"
+import SharedContext from "../../../SharedContext";
 
-export default function CardAdd() {
+const CardAdd = () => {
+
+    const history = useHistory();
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const { user } = useContext(SharedContext)
+    const assignPriv = async () => {
+
+        const privilegeSelected = document.getElementById('privileges').value
+        if (privilegeSelected) {
+            try {
+                
+                const endpoint = `privilege/add`
+                const msgReturned = await axios({
+                    method: 'POST',
+                    url: `${user.apiURL}/${endpoint}`,
+                    data: {
+                        user: urlParams.get('user'),
+                        privilege: privilegeSelected
+                    }
+                });
+
+                alert("Privilegio agregado")
+                history.push({ pathname: '/privileges/Handler', search: `?user=${urlParams.get('user')}` })
+
+            } catch (error) {
+                alert("Algo salio mal")
+            }
+        } else {
+            alert("No se ha seleccionado ningun privilegio apra ser asignado")
+        }
+    }
 
   return (
     <>
@@ -25,10 +60,10 @@ export default function CardAdd() {
                             </label>
                             <select className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white 
                                 rounded text-md shadow focus:outline-none focus:shadow-outline w-full 
-                                ease-linear transition-all duration-150" mutiple={true} size="4"
+                                ease-linear transition-all duration-150" size="4"
                                 id="privileges" name="privileges">
                                     <option value="privileges">Privilegios</option>
-                                    <option value="asistencia">Asistencia</option>
+                                    <option value="attendance">Asistencia</option>
                                     <option value="reports">Reportes</option>
                                     <option value="users">Usuarios</option>
                             </select>
@@ -40,6 +75,7 @@ export default function CardAdd() {
                         <button type="button"
                             className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             id="sendMessage" name="sendMessage"
+                            onClick={() => assignPriv()}
                             >
                                 Asignar
                             </button>
@@ -54,3 +90,5 @@ export default function CardAdd() {
     </>
   );
 }
+
+export default CardAdd

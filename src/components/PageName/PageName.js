@@ -31,8 +31,6 @@ export default () => {
         // Privileges
         case "/users/List?s=privileges":
             return "Privilegios, listado de funcionarios";
-        case "/privileges/Add":
-            return "Agregar privilegios al funcionario";
         // Change Password
         case "/home/ChangePassword":
             return "Cambiar contraseña";
@@ -40,6 +38,7 @@ export default () => {
             // With queryString params
             if ( ((pathLocation.match())["input"]).includes("/users/Handler") ) return "Edición de usuario"
             if ( ((pathLocation.match())["input"]).includes("/privileges/Handler") ) return "Privilegios relacionados al usuario"
+            if ( ((pathLocation.match())["input"]).includes("/privileges/Add") ) return "Agregar privilegios al funcionario"
             return "-"
         }
     }

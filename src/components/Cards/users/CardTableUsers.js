@@ -124,7 +124,7 @@ const CardTable = ({ color }) => {
                         { mappedUser.status ? 'Activo' : 'Inactivo'}
                       </td>
                       <td className="px-6 align-middle text-sm whitespace-no-wrap p-4 text-center">
-                          <button onClick={ () => getNextLocation(mappedUser.user) }
+                          <button onClick={ () => getNextLocation(urlParams.get("s") === "privileges" ? mappedUser._id : mappedUser.user) }
                             className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 border rounded-full"
                           >
                             <i className="fas fa-arrow-right"></i>
