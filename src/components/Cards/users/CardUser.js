@@ -15,6 +15,7 @@ const CardUser = () => {
     button.classList.add('bg-gray-900');
 
     const _user = user.data.user,
+      comments = user.data.comments,
       identification = document.getElementById('identification').value,
       name = document.getElementById('name').value,
       address = document.getElementById('address').value,
@@ -36,7 +37,8 @@ const CardUser = () => {
           cellphone: cellphone,
           telephone: telephone,
           email: email,
-          other: notes
+          other: notes,
+          comments: comments
         }
       });
 
