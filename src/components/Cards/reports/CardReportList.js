@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
-export default function CardTable({ color }) {
+import { ReportUsers } from "components/Reports/Users";
+import { ReportAttendance } from "components/Reports/Attendance";
+import { ReportJustified } from "components/Reports/Justified";
+import SharedContext from "../../../SharedContext";
+
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+const CardTable = ({ color }) => {
+
+  const { user } = useContext(SharedContext)
 
   return (
     <>
@@ -82,11 +92,11 @@ export default function CardTable({ color }) {
                         Lista de usuarios con los datos registrados en el sistema
                     </td>
                     <td className="px-6 align-middle p-4 text-center">
-                        <Link to="Report"
-                            className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
+                        <button className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
+                          onClick={ async () => pdfMake.createPdf(await ReportUsers(user.apiURL)).download() }
                         >
                             <i className="fas fa-arrow-right"></i>
-                        </Link>
+                        </button>
                     </td>
                 </tr>
 
@@ -103,11 +113,11 @@ export default function CardTable({ color }) {
                         Resumen de cada usuario de asistencia registrada
                     </td>
                     <td className="px-6 align-middle p-4 text-center">
-                        <Link to="Report"
-                            className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
+                        <button className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
+                          onClick={ async () => pdfMake.createPdf(await ReportAttendance(user.apiURL)).download() }
                         >
                             <i className="fas fa-arrow-right"></i>
-                        </Link>
+                        </button>
                     </td>
                 </tr>
 
@@ -124,11 +134,11 @@ export default function CardTable({ color }) {
                         Lista de justificaciones con relación a sus usuarios
                     </td>
                     <td className="px-6 align-middle p-4 text-center">
-                        <Link to="Report"
-                            className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
+                        <button className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
+                          onClick={ async () => pdfMake.createPdf(await ReportJustified(user.apiURL)).download() }
                         >
                             <i className="fas fa-arrow-right"></i>
-                        </Link>
+                        </button>
                     </td>
                 </tr>
 
@@ -148,3 +158,5 @@ CardTable.defaultProps = {
 CardTable.propTypes = {
   color: PropTypes.oneOf(["light", "dark"]),
 };
+
+export default CardTable
