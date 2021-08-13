@@ -1,6 +1,87 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import axios from 'axios';
+import Swal from 'sweetalert2'
+import SharedContext from "../../../SharedContext";
 
-export default function CardTable() {
+const CardTable = () => {
+
+    const history = useHistory();
+    const urlParams = new URLSearchParams(window.location.search);
+    const { user } = useContext(SharedContext)
+    const [ msg, setMsg ] = useState({})
+
+    const loadMessage = async () => {
+        try {
+            const endpoint = `message/get/${urlParams.get('msg')}`
+            const msg = await axios({
+                method: 'GET',
+                url: `${user.apiURL}/${endpoint}`
+            });
+            msg.data.Message.userSend = await getUserName(msg.data.Message.user_from)
+            msg.data.Message.title = 'Re: ' + msg.data.Message.title
+            setMsg(msg.data.Message)
+        } catch (error) {
+            alert(error)
+        }   
+    }
+
+    const getUserName = async userId => {
+        try {
+            const endpoint = `functionary/getById/${userId}`
+            const data = await axios({
+              method: 'GET',
+              url: `${user.apiURL}/${endpoint}`
+            });
+            return `${data.data.User.name}`
+        } catch (error) {
+            alert("Algo salio mal")
+        }
+    }
+
+    const sendMessage = () => {
+
+        const user_from = user.data._id,
+            user_to = document.getElementById('sendTo').value,
+            title = document.getElementById('affair').value,
+            description = document.getElementById('description').value
+
+        if (description) {
+
+            Swal.fire({
+                title: '¿Desea enviar el mensaje',
+                showCancelButton: true,
+                confirmButtonText: `Enviar`,
+            }).then( async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const endpoint = `message/send`
+                        const returnedValue = await axios({
+                            method: 'POST',
+                            url: `${user.apiURL}/${endpoint}`,
+                            data: {
+                                user_from: user_from,
+                                user_to: user_to,
+                                title: title,
+                                description: description
+                            }
+                        });
+                        if (returnedValue) Swal.fire('¡Mensaje enviado!', '', 'success')
+                    } catch (error) {
+                        alert("Algo salio mal")
+                    }
+                }
+            })
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Espacios vacios',
+                text: 'Por favor complete todos los para enviar el mensaje'
+              })
+        }
+    }
+
+    useEffect(() => { loadMessage() }, [])
 
   return (
     <>
@@ -9,17 +90,14 @@ export default function CardTable() {
             <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
             <form>
 
-                <h6 className="text-gray-500 text-sm mt-3 mb-6 font-bold uppercase">
-                Destinatarios
-                </h6>
+                <h6 className="text-gray-500 text-sm mt-3 mb-6 font-bold uppercase"> Respondiendo a: </h6>
 
                 <div className="flex flex-wrap">
-
                     <div className="w-full lg:w-12/12 px-4">
                         <div className="relative w-full mb-3">
                             <label
                                 className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                                htmlFor="grid-password"
+                                htmlFor="sendTo"
                             >
                                 Para
                             </label>
@@ -27,7 +105,7 @@ export default function CardTable() {
                                 rounded text-sm shadow focus:outline-none focus:shadow-outline w-full 
                                 ease-linear transition-all duration-150"
                                 id="sendTo" name="sendTo">
-                                    <option value="">Usuario a quien se le responde</option>
+                                    <option value={msg.user_from} > { msg.userSend } </option>
                             </select>
                         </div>
                     </div>
@@ -36,7 +114,7 @@ export default function CardTable() {
                 <hr className="mt-6 border-b-1 border-gray-400" />
 
                 <h6 className="text-gray-500 text-sm mt-3 mb-6 font-bold uppercase">
-                Información del mensaje
+                Información de mensaje a responder
                 </h6>
 
                 <div className="flex flex-wrap">
@@ -45,13 +123,14 @@ export default function CardTable() {
                         <div className="relative w-full mb-3">
                         <label
                             className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                            htmlFor="grid-password">
+                            htmlFor="affair">
                             Asunto
                         </label>
                         <input
                             type="text"
                             className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                            id="affair" name="affair" value="Asunto del mensaje que se responde"/>
+                            id="affair" name="affair" 
+                            defaultValue={ msg.title } />
                         </div>
                     </div>
 
@@ -66,9 +145,7 @@ export default function CardTable() {
                             type="text" rows="8" 
                             className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                             id="description" name="description"
-                        >
-                            Descripción del mensaje que se responde
-                        </textarea>
+                        />
                         </div>
                     </div>
 
@@ -77,6 +154,7 @@ export default function CardTable() {
                         <button type="button"
                             className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             id="sendMessage" name="sendMessage"
+                            onClick={ () => sendMessage() }
                             >
                                 Enviar
                             </button>
@@ -91,3 +169,5 @@ export default function CardTable() {
     </>
   );
 }
+
+export default CardTable

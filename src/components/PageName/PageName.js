@@ -11,12 +11,8 @@ export default () => {
             return "Redactar mensaje";
         case "/comunication/Inbox":
             return "Mensajes recibidos";
-        case "/comunication/Deleted":
-            return "Mensajes eliminados";
         case "/comunication/Sended":
             return "Mensajes enviados";
-        case "/comunication/Search":
-        return "Buscador de mensajes";
         // Users
         case "/users/List?s=users":
             return "Listado de funcionarios";
@@ -39,6 +35,8 @@ export default () => {
             if ( ((pathLocation.match())["input"]).includes("/users/Handler") ) return "Edición de usuario"
             if ( ((pathLocation.match())["input"]).includes("/privileges/Handler") ) return "Privilegios relacionados al usuario"
             if ( ((pathLocation.match())["input"]).includes("/privileges/Add") ) return "Agregar privilegios al funcionario"
+            if ( ((pathLocation.match())["input"]).includes("/comunication/Message") ) return "Detalle de mensaje"
+            if ( ((pathLocation.match())["input"]).includes("/comunication/Reply") ) return "Responder mensaje"
             return "-"
         }
     }

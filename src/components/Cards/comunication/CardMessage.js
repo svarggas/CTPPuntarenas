@@ -1,6 +1,45 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import axios from 'axios';
 
-export default function CardTable() {
+import SharedContext from "../../../SharedContext";
+
+const CardTable = () => {
+
+    const history = useHistory();
+    const urlParams = new URLSearchParams(window.location.search);
+    const { user } = useContext(SharedContext)
+    const [ msg, setMsg ] = useState({})
+
+    const loadMessage = async () => {
+        try {
+            const endpoint = `message/get/${urlParams.get('msg')}`
+            const msg = await axios({
+                method: 'GET',
+                url: `${user.apiURL}/${endpoint}`
+            });
+
+            msg.data.Message.userSend = await getUserName(msg.data.Message.user_from)
+            setMsg(msg.data.Message)
+        } catch (error) {
+            alert(error)
+        }   
+    }
+
+    const getUserName = async userId => {
+        try {
+            const endpoint = `functionary/getById/${userId}`
+            const data = await axios({
+              method: 'GET',
+              url: `${user.apiURL}/${endpoint}`
+            });
+            return `${data.data.User.name}`
+        } catch (error) {
+            alert("Algo salio mal")
+        }
+    }
+
+    useEffect(() => { loadMessage() }, [])
 
   return (
     <>
@@ -23,12 +62,11 @@ export default function CardTable() {
                             >
                                 De
                             </label>
-                            <select className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white 
-                                rounded text-sm shadow focus:outline-none focus:shadow-outline w-full 
-                                ease-linear transition-all duration-150"
-                                id="sendTo" name="sendTo">
-                                    <option value="">Juanito Perez</option>
-                            </select>
+                            <input
+                                type="text"
+                                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
+                                id="from" name="from" defaultValue={ msg.userSend } readOnly
+                            />
                         </div>
                     </div>
                 </div>
@@ -51,7 +89,8 @@ export default function CardTable() {
                         <input
                             type="text"
                             className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                            id="affair" name="affair" value="Asunto del mensaje recibido"/>
+                            id="affair" name="affair" defaultValue={ msg.title } readOnly
+                        />
                         </div>
                     </div>
 
@@ -65,18 +104,17 @@ export default function CardTable() {
                         <textarea
                             type="text" rows="8" 
                             className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                            id="description" name="description"
-                        >
-                            Descirpción del mensaje recibido
-                        </textarea>
+                            id="description" name="description" defaultValue={msg.description} readOnly
+                        />
                         </div>
                     </div>
 
                     <div className="w-full lg:w-12/12 px-4">
                         <div className="relative w-full mb-3 text-right">
-                        <button type="button"
-                            className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                            id="sendMessage" name="sendMessage"
+                            <button type="button"
+                                className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                                id="sendMessage" name="sendMessage"
+                                onClick={ () => history.push({ pathname: '/comunication/Reply', search:`?msg=${msg._id}` }) }
                             >
                                 Responder
                             </button>
@@ -91,3 +129,5 @@ export default function CardTable() {
     </>
   );
 }
+
+export default CardTable

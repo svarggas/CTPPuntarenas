@@ -1,6 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import axios from 'axios';
+import Swal from 'sweetalert2'
 
 import userGreen from 'assets/img/userGreen.png';
 import userIndigo from 'assets/img/userIndigo.png';
@@ -9,7 +10,81 @@ import userYellow from 'assets/img/userYellow.png';
 import userPurple from 'assets/img/userPurple.png';
 import userBlack from 'assets/img/userBlack.png';
 
-export default function CardTable({ color }) {
+import SharedContext from "../../../SharedContext";
+
+const CardTable = ({ color }) => {
+
+    const history = useHistory();
+    const { user } = useContext(SharedContext)
+    const [ msgList, setMsgList ] = useState([])
+
+    const loadMessages = async () => {
+        try {
+            const endpoint = `message/getInbox/${user.data._id}`
+            const list = await axios({
+                method: 'GET',
+                url: `${user.apiURL}/${endpoint}`
+            });
+            
+            for (const element of list.data.Inbox) {
+                element.userSendName = await getUserName(element.user_from)
+            }
+
+            setMsgList(list.data.Inbox)
+        } catch (error) {
+            alert(error)
+        }   
+    }
+
+    const getUserName = async userId => {
+        try {
+            const endpoint = `functionary/getById/${userId}`
+            const data = await axios({
+              method: 'GET',
+              url: `${user.apiURL}/${endpoint}`
+            });
+            return `${data.data.User.name}`
+        } catch (error) {
+            alert("Algo salio mal")
+        }
+    }
+
+    const deleteMessage = msgId => {
+        Swal.fire({
+            title: '¿Desea eliminar el mensaje seleccionado?',
+            showCancelButton: true,
+            confirmButtonText: `Eliminar`,
+        }).then( async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const endpoint = `message/delete/${msgId}`
+                    await axios({
+                        method: 'DELETE',
+                        url: `${user.apiURL}/${endpoint}`
+                    });
+                    loadMessages()
+                    Swal.fire('¡Eliminado!', '', 'success')
+                } catch (error) {
+                    alert("Algo salio mal")
+                }
+            }
+        })
+    }
+
+    const avatars = [userGreen, userIndigo , userPink , userYellow , userPurple, userBlack]
+    const getRandomAvatar = () => avatars[Math.floor(Math.random() * avatars.length)]
+
+    const formatDate = date => {
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const dateObj = new Date(date);
+        const month = monthNames[dateObj.getMonth()];
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const year = dateObj.getFullYear();
+        return `${day}-${month}-${year}`
+    }
+
+    useEffect(() => { loadMessages() }, [])
 
   return (
     <>
@@ -28,277 +103,70 @@ export default function CardTable({ color }) {
         <div className="block w-full overflow-x-auto text-gray-900">
             <table className="w-full bg-transparent border-collapse">
 
+            <thead>
+                <th colSpan="2" className="p-4 text-gray-300 text-9xl">Mensaje</th>
+                <th className="p-4 text-gray-300 text-9xl text-center">Estado</th>
+                <th className="p-4 text-gray-300 text-9xl text-center">Fecha</th>
+                <th className="p-4 text-gray-300 text-9xl text-center">Eliminar</th>
+                <th className="p-4 text-gray-300 text-9xl text-center">Ingresar</th>
+            </thead>
+
                 <tbody className="bg-gray-200">
 
-                    <tr className="bg-white border-4 border-gray-200">
-                        <td className="p-4 text-gray-900 text-9xl"
-                            style={{ width:"5%" }}
-                        >
-                            <div className="flex items-center">
-                                <img alt="" src={userGreen} 
-                                    style={{ width:"45px" }}/>
-                            </div>
-                        </td>
-                        <td className="p-4 text-left"
-                            style={{ width:"70%"}}
-                        >
+                    {
+                        msgList.map( msg => {
+                            return(
+                                <tr className="bg-white border-4 border-gray-200" key={ msg._id }>
+                                    <td className="p-4 text-gray-900 text-9xl"
+                                        style={{ width:"5%" }}
+                                    >
+                                        <div className="flex items-center">
+                                            <img alt="" src={ getRandomAvatar() } 
+                                                style={{ width:"45px" }}/>
+                                        </div>
+                                    </td>
+                                    <td className="p-4 text-left" style={{ width:"40%"}} >
 
-                            <span className="font-semibold">
-                                Rafael Alejandro Barboza Rojas
-                            </span><br/>
-                            Lorem Ipsum
+                                        <span className="font-semibold"> { msg.userSendName } </span><br/>
+                                        { msg.title }
 
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <i className="fas fa-eye"></i>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>Funcionario</span>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>05/06/2020<br/>10:00</span>
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <Link to="Message"
-                                className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
-                            >
-                                <i className="fas fa-arrow-right"></i>
-                            </Link>
-                        </td>
-                    </tr>
-
-                    <tr className="bg-white border-4 border-gray-200">
-                        <td className="p-4 text-gray-900 text-9xl"
-                            style={{ width:"5%" }}
-                        >
-                            <div className="flex items-center">
-                                <img alt="" src={userIndigo} 
-                                    style={{ width:"45px" }}/>
-                            </div>
-                        </td>
-                        <td className="p-4 text-left"
-                            style={{ width:"70%"}}
-                        >
-
-                            <span className="font-semibold">
-                                Victoria Vargas Rojas
-                            </span><br/>
-                            Lorem Ipsum
-
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <i className="fas fa-eye-slash"></i>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>Ex Alumno</span>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>05/06/2020<br/>10:00</span>
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <Link to="Message"
-                                className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
-                            >
-                                <i className="fas fa-arrow-right"></i>
-                            </Link>
-                        </td>
-                    </tr>
-
-                    <tr className="bg-white border-4 border-gray-200">
-                        <td className="p-4 text-gray-900 text-9xl"
-                            style={{ width:"5%" }}
-                        >
-                            <div className="flex items-center">
-                                <img alt="" src={userPink} 
-                                    style={{ width:"45px" }}/>
-                            </div>
-                        </td>
-                        <td className="p-4 text-left"
-                            style={{ width:"70%"}}
-                        >
-
-                            <span className="font-semibold">
-                                Jimena Vargas Perez
-                            </span><br/>
-                            Lorem Ipsum
-
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <i className="fas fa-eye"></i>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>Alumno</span>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>05/06/2020<br/>10:00</span>
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <Link to="Message"
-                                className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
-                            >
-                                <i className="fas fa-arrow-right"></i>
-                            </Link>
-                        </td>
-                    </tr>
-
-                    <tr className="bg-white border-4 border-gray-200">
-                        <td className="p-4 text-gray-900 text-9xl"
-                            style={{ width:"5%" }}
-                        >
-                            <div className="flex items-center">
-                                <img alt="" src={userPurple} 
-                                    style={{ width:"45px" }}/>
-                            </div>
-                        </td>
-                        <td className="p-4 text-left"
-                            style={{ width:"70%"}}
-                        >
-
-                            <span className="font-semibold">
-                                Sebastián Rojas
-                            </span><br/>
-                            Lorem Ipsum
-
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <i className="fas fa-eye-slash"></i>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>Padre</span>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>05/06/2020<br/>10:00</span>
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <Link to="Message"
-                                className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
-                            >
-                                <i className="fas fa-arrow-right"></i>
-                            </Link>
-                        </td>
-                    </tr>
-
-                    <tr className="bg-white border-4 border-gray-200">
-                        <td className="p-4 text-gray-900 text-9xl"
-                            style={{ width:"5%" }}
-                        >
-                            <div className="flex items-center">
-                                <img alt="" src={userYellow} 
-                                    style={{ width:"45px" }}/>
-                            </div>
-                        </td>
-                        <td className="p-4 text-left"
-                            style={{ width:"70%"}}
-                        >
-
-                            <span className="font-semibold">
-                                Daniel Villalobos Vargas
-                            </span><br/>
-                            Lorem Ipsum
-
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <i className="fas fa-eye-slash"></i>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>Interesado</span>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>05/06/2020<br/>10:00</span>
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <Link to="Message"
-                                className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
-                            >
-                                <i className="fas fa-arrow-right"></i>
-                            </Link>
-                        </td>
-                    </tr>
-
-                    <tr className="bg-white border-4 border-gray-200">
-                        <td className="p-4 text-gray-900 text-9xl"
-                            style={{ width:"5%" }}
-                        >
-                            <div className="flex items-center">
-                                <img alt="" src={userBlack} 
-                                    style={{ width:"45px" }}/>
-                            </div>
-                        </td>
-                        <td className="p-4 text-left"
-                            style={{ width:"70%"}}
-                        >
-
-                            <span className="font-semibold">
-                                Zenya Malena Rojas Gugoltz
-                            </span><br/>
-                            Lorem Ipsum
-
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <i className="fas fa-eye-slash"></i>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>Otro</span>
-                        </td>
-                        <td className="p-4 text-center"
-                            style={{ width:"10%" }}
-                        >
-                            <span>05/06/2020<br/>10:00</span>
-                        </td>
-                        <td className="p-4 text-center text-xl"
-                            style={{ width:"5%" }}
-                        >
-                            <Link to="Message"
-                                className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
-                            >
-                                <i className="fas fa-arrow-right"></i>
-                            </Link>
-                        </td>
-                    </tr>
+                                    </td>
+                                    <td className="p-4 text-center text-xl"
+                                        style={{ width:"5%" }}
+                                    >
+                                        { 
+                                            msg.seen ? 
+                                            <i className="fas fa-eye"></i> : 
+                                            <i className="fas fa-eye-slash"></i> 
+                                        }
+                                    </td>
+                                    <td className="p-4 text-center"
+                                        style={{ width:"10%" }}
+                                    >
+                                        <span> { formatDate(msg.date) } </span>
+                                    </td>
+                                    <td className="p-4 text-center text-xl"
+                                        style={{ width:"5%" }}
+                                    >
+                                        <button className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
+                                            onClick={ () => deleteMessage(msg._id) }
+                                        >
+                                            <i className="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                    <td className="p-4 text-center text-xl"
+                                        style={{ width:"5%" }}
+                                    >
+                                        <button className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2  border rounded-full"
+                                            onClick={ () => history.push({ pathname: 'Message', search:`?msg=${msg._id}` }) }
+                                        >
+                                            <i className="fas fa-arrow-right"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    }
 
                 </tbody>
 
@@ -309,10 +177,4 @@ export default function CardTable({ color }) {
   );
 }
 
-CardTable.defaultProps = {
-  color: "light",
-};
-
-CardTable.propTypes = {
-  color: PropTypes.oneOf(["light", "dark"]),
-};
+export default CardTable

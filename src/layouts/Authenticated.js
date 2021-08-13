@@ -15,7 +15,6 @@ import UserAdd from "views/users/Add.js";
 import UserHandler from "views/users/Handler.js";
 
 import CommunicationCompose from "views/comunication/Compose.js";
-import CommunicationDeleted from "views/comunication/Deleted.js";
 import CommunicationInbox from "views/comunication/index";
 import CommunicationMessage from "views/comunication/Message.js";
 import CommunicationReply from "views/comunication/Reply.js";
@@ -64,7 +63,6 @@ const Authenticated = () => {
             <Route path="/users/Handler" exact component={UserHandler} />
 
             <Route path="/comunication/Compose" exact component={CommunicationCompose} />
-            <Route path="/comunication/Deleted" exact component={CommunicationDeleted} />
             <Route path="/comunication/Inbox" exact component={CommunicationInbox} />
             <Route path="/comunication/Message" exact component={CommunicationMessage} />
             <Route path="/comunication/Reply" exact component={CommunicationReply} />
