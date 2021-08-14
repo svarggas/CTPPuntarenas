@@ -1,6 +1,74 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import axios from "axios"
+import SharedContext from "../../../SharedContext";
+import Swal from 'sweetalert2'
 
-export default function CardTable() {
+const CardTable = () => {
+
+    const history = useHistory();
+    const { user } = useContext(SharedContext)
+    const [ userList, setUserList ] = useState([])
+
+    const loadUsers = async () => {
+      try {
+        const endpoint = `functionary/getList/all`
+        const list = await axios({
+          method: 'GET',
+          url: `${user.apiURL}/${endpoint}`
+        });
+        setUserList(list.data.User)
+      } catch (error) {
+        alert("Algo salio mal")
+      }
+    }
+
+    const sendMessage = () => {
+
+        const user_from = user.data._id,
+            user_to = document.getElementById('sendTo').value,
+            title = document.getElementById('affair').value,
+            description = document.getElementById('description').value
+
+        if (description) {
+
+            Swal.fire({
+                title: '¿Desea enviar el mensaje',
+                showCancelButton: true,
+                confirmButtonText: `Enviar`,
+            }).then( async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const endpoint = `message/send`
+                        const returnedValue = await axios({
+                            method: 'POST',
+                            url: `${user.apiURL}/${endpoint}`,
+                            data: {
+                                user_from: user_from,
+                                user_to: user_to,
+                                title: title,
+                                description: description
+                            }
+                        });
+                        if (returnedValue) {
+                            Swal.fire('¡Mensaje enviado!', '', 'success')
+                            history.push({ pathname: 'Inbox' })
+                        }
+                    } catch (error) {
+                        alert("Algo salio mal")
+                    }
+                }
+            })
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Espacios vacios',
+                text: 'Por favor complete todos los para enviar el mensaje'
+              })
+        }
+    }
+  
+    useEffect(() => { loadUsers() }, [])
 
   return (
     <>
@@ -27,13 +95,18 @@ export default function CardTable() {
                                 rounded text-sm shadow focus:outline-none focus:shadow-outline w-full 
                                 ease-linear transition-all duration-150"
                                 id="sendTo" name="sendTo">
-                                    <option value="">Seleccione un destinatario</option>
-                                    <optgroup label="Docentes">
-                                        <option value="">Juanita</option>
-                                    </optgroup>
-                                    <optgroup label="Funcionarios administrativos">
-                                        <option value="">Juanito</option>
-                                    </optgroup>
+                                    {
+                                        userList.map( mappedUser => {
+                                            return (
+                                                mappedUser._id !== user.data._id ?
+                                                    <option value={ mappedUser._id } key={ mappedUser.user } > 
+                                                        { mappedUser.name } 
+                                                    </option>
+                                                    :
+                                                    null
+                                            )
+                                        })
+                                    }
                             </select>
                         </div>
                     </div>
@@ -51,7 +124,7 @@ export default function CardTable() {
                         <div className="relative w-full mb-3">
                         <label
                             className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                            htmlFor="grid-password">
+                            htmlFor="affair">
                             Asunto
                         </label>
                         <input
@@ -65,7 +138,7 @@ export default function CardTable() {
                         <div className="relative w-full mb-3">
                         <label
                             className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                            htmlFor="grid-password">
+                            htmlFor="description">
                             Descripción
                         </label>
                         <textarea
@@ -81,6 +154,7 @@ export default function CardTable() {
                         <button type="button"
                             className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             id="sendMessage" name="sendMessage"
+                            onClick={() => sendMessage()}
                             >
                                 Enviar
                             </button>
@@ -95,3 +169,5 @@ export default function CardTable() {
     </>
   );
 }
+
+export default CardTable

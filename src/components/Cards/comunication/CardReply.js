@@ -66,7 +66,10 @@ const CardTable = () => {
                                 description: description
                             }
                         });
-                        if (returnedValue) Swal.fire('¡Mensaje enviado!', '', 'success')
+                        if (returnedValue) {
+                            Swal.fire('¡Mensaje enviado!', '', 'success')
+                            history.push({ pathname: 'Inbox' })
+                        }
                     } catch (error) {
                         alert("Algo salio mal")
                     }
