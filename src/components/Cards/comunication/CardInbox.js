@@ -29,7 +29,7 @@ const CardTable = ({ color }) => {
             for (const element of list.data.Inbox) {
                 element.user_from.includes('@')
                 ?
-                element.userSendName = `(Externo): ${element.user_from}`
+                element.userSendName = `(Externo) - ${element.user_from}`
                 :
                 element.userSendName = await getUserName(element.user_from)
             }
@@ -133,8 +133,8 @@ const CardTable = ({ color }) => {
                                     </td>
                                     <td className="p-4 text-left" style={{ width:"40%"}} >
 
-                                        <span className="font-semibold"> { msg.userSendName } </span><br/>
-                                        { msg.title }
+                                        <span className="font-semibold"> De: { msg.userSendName } </span><br/>
+                                        Asunto: { msg.title }
 
                                     </td>
                                     <td className="p-4 text-center text-xl"
