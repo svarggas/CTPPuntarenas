@@ -18,7 +18,16 @@ const CardTable = () => {
                 method: 'GET',
                 url: `${user.apiURL}/${endpoint}`
             });
-            msg.data.Message.userSend = await getUserName(msg.data.Message.user_from)
+
+            //msg.data.Message.userSend = await getUserName(msg.data.Message.user_from)
+            msg.data.Message.user_from.includes('@')
+                ?
+                msg.data.Message.userSend = `${msg.data.Message.user_from}`
+                :
+                msg.data.Message.userSend = await getUserName(msg.data.Message.user_from)
+            
+
+
             msg.data.Message.title = 'Re: ' + msg.data.Message.title
             setMsg(msg.data.Message)
         } catch (error) {
@@ -55,7 +64,9 @@ const CardTable = () => {
             }).then( async (result) => {
                 if (result.isConfirmed) {
                     try {
-                        const endpoint = `message/send`
+                        let endpoint = `message/send`
+                        if(document.getElementById('sendTo').value.includes('@')) endpoint = 'message/sendExternal'
+
                         const returnedValue = await axios({
                             method: 'POST',
                             url: `${user.apiURL}/${endpoint}`,

@@ -19,7 +19,12 @@ const CardTable = () => {
                 url: `${user.apiURL}/${endpoint}`
             });
 
-            msg.data.Message.userSend = await getUserName(msg.data.Message.user_from)
+            msg.data.Message.user_from.includes('@')
+                ?
+                msg.data.Message.userSend = `${msg.data.Message.user_from}`
+                :
+                msg.data.Message.userSend = await getUserName(msg.data.Message.user_from)
+
             setMsg(msg.data.Message)
         } catch (error) {
             alert(error)

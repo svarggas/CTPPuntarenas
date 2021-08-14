@@ -27,6 +27,10 @@ const CardTable = ({ color }) => {
             });
             
             for (const element of list.data.Inbox) {
+                element.user_from.includes('@')
+                ?
+                element.userSendName = `(Externo): ${element.user_from}`
+                :
                 element.userSendName = await getUserName(element.user_from)
             }
 
