@@ -108,11 +108,13 @@ const CardTable = ({ color }) => {
             <table className="w-full bg-transparent border-collapse">
 
             <thead>
-                <th colSpan="2" className="p-4 text-gray-300 text-9xl">Mensaje</th>
-                <th className="p-4 text-gray-300 text-9xl text-center">Estado</th>
-                <th className="p-4 text-gray-300 text-9xl text-center">Fecha</th>
-                <th className="p-4 text-gray-300 text-9xl text-center">Eliminar</th>
-                <th className="p-4 text-gray-300 text-9xl text-center">Ingresar</th>
+                <tr>
+                    <th colSpan="2" className="p-4 text-gray-300 text-9xl">Mensaje</th>
+                    <th className="p-4 text-gray-300 text-9xl text-center">Estado</th>
+                    <th className="p-4 text-gray-300 text-9xl text-center">Fecha</th>
+                    <th className="p-4 text-gray-300 text-9xl text-center">Eliminar</th>
+                    <th className="p-4 text-gray-300 text-9xl text-center">Ingresar</th>
+                </tr>
             </thead>
 
                 <tbody className="bg-gray-200">
