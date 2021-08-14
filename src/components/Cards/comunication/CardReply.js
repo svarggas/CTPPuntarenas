@@ -49,7 +49,7 @@ const CardTable = () => {
         if (description) {
 
             Swal.fire({
-                title: '¿Desea enviar el mensaje',
+                title: '¿Desea enviar el mensaje?',
                 showCancelButton: true,
                 confirmButtonText: `Enviar`,
             }).then( async (result) => {

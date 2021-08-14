@@ -1,8 +1,79 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import axios from 'axios';
+import Swal from 'sweetalert2'
+import SharedContext from "../../../SharedContext";
 
-// components
+const CardMensajeFuncionarios = () => {
 
-export default function CardMensajeFuncionarios() {
+  const history = useHistory();
+  const { user } = useContext(SharedContext)
+  const [ userList, setUserList ] = useState([])
+
+  const loadUsers = async () => {
+    try {
+      const endpoint = `functionary/getList/all`
+      const list = await axios({
+        method: 'GET',
+        url: `${user.apiURL}/${endpoint}`
+      });
+      setUserList(list.data.User)
+    } catch (error) {
+      alert("Algo salio mal")
+    }
+  }
+
+  const sendMessage = () => {
+
+      const user_from = document.getElementById('replyTo').value,
+          user_to = document.getElementById('sendTo').value,
+          title = document.getElementById('affair').value,
+          description = document.getElementById('description').value
+
+      if (description) {
+
+          Swal.fire({
+              title: '¿Desea enviar el mensaje?',
+              showCancelButton: true,
+              confirmButtonText: `Enviar`,
+          }).then( async (result) => {
+              if (result.isConfirmed) {
+                  try {
+                      const endpoint = `message/send`
+                      const returnedValue = await axios({
+                          method: 'POST',
+                          url: `${user.apiURL}/${endpoint}`,
+                          data: {
+                              user_from: user_from,
+                              user_to: user_to,
+                              title: title,
+                              description: description
+                          }
+                      });
+                      if (returnedValue) {
+                          Swal.fire(
+                            '¡Mensaje enviado!', 
+                            'El mensaje será respondido al correo que ingreso anteriormente', 
+                            'success'
+                          )
+                          history.push({ pathname: '/' })
+                      }
+                  } catch (error) {
+                      alert("Algo salio mal")
+                  }
+              }
+          })
+      } else {
+          Swal.fire({
+              icon: 'warning',
+              title: 'Espacios vacios',
+              text: 'Por favor complete todos los para enviar el mensaje'
+            })
+      }
+  }
+
+  useEffect(() => { loadUsers() }, [])
+
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-200 border-0">
@@ -22,7 +93,7 @@ export default function CardMensajeFuncionarios() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
+                    htmlFor="sendTo"
                   >
                     Para
                   </label>
@@ -30,13 +101,15 @@ export default function CardMensajeFuncionarios() {
                     rounded text-sm shadow focus:outline-none focus:shadow-outline w-full 
                     ease-linear transition-all duration-150"
                     id="sendTo" name="sendTo">
-                        <option value="">Seleccione un destinatario</option>
-                        <optgroup label="Docentes">
-                            <option value="">Juanita</option>
-                        </optgroup>
-                        <optgroup label="Funcionarios administrativos">
-                            <option value="">Juanito</option>
-                        </optgroup>
+                        {
+                          userList.map( mappedUser => {
+                            return (
+                              <option value={ mappedUser._id } key={ mappedUser.user } > 
+                                  { mappedUser.name } 
+                              </option>
+                            )
+                          })
+                      }
                   </select>
                 </div>
               </div>
@@ -57,30 +130,6 @@ export default function CardMensajeFuncionarios() {
                 </div>
               </div>
 
-              <div className="w-full lg:w-12/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Relación al mensaje a enviar
-                  </label>
-                  <select className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white 
-                    rounded text-sm shadow focus:outline-none focus:shadow-outline w-full 
-                    ease-linear transition-all duration-150"
-                    id="labelFrom" name="labelFrom">
-                        <option value="">Seleccione una opción</option>
-                        <option value="padre">Padre</option>
-                        <option value="alumno">Alumno</option>
-                        <option value="exalumno">Ex Alumno</option>
-                        <option value="interesado">Interesado</option>
-                        <option value="otro">Otro</option>
-                  </select>
-                  <span className="text-xs text-gray-600">
-                    Esta opción no afecta el envío del mensaje
-                  </span>
-                </div>
-              </div>
             </div>
 
             <hr className="mt-6 border-b-1 border-gray-400" />
@@ -94,7 +143,7 @@ export default function CardMensajeFuncionarios() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password">
+                    htmlFor="affair">
                     Asunto
                   </label>
                   <input
@@ -108,7 +157,7 @@ export default function CardMensajeFuncionarios() {
                 <div className="relative w-full mb-3">
                   <label
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-password">
+                    htmlFor="description">
                     Descripción
                   </label>
                   <textarea
@@ -123,9 +172,9 @@ export default function CardMensajeFuncionarios() {
                 <div className="relative w-full mb-3 text-right">
                 <button type="button"
                     className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                    id="sendMessage" name="sendMessage"
+                    id="sendMessage" name="sendMessage" onClick={() => sendMessage()}
                     >
-                        Enviar
+                      Enviar
                     </button>
                 </div>
               </div>
@@ -137,3 +186,5 @@ export default function CardMensajeFuncionarios() {
     </>
   );
 }
+
+export default CardMensajeFuncionarios
