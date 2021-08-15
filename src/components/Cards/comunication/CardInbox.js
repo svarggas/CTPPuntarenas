@@ -36,7 +36,11 @@ const CardTable = ({ color }) => {
 
             setMsgList(list.data.Inbox)
         } catch (error) {
-            Swal.fire("Algo salio mal")
+            Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
         }   
     }
 
@@ -49,7 +53,11 @@ const CardTable = ({ color }) => {
             });
             return `${data.data.User.name}`
         } catch (error) {
-            Swal.fire("Algo salio mal")
+            Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
         }
     }
 
@@ -69,7 +77,11 @@ const CardTable = ({ color }) => {
                     loadMessages()
                     Swal.fire('¡Eliminado!', '', 'success')
                 } catch (error) {
-                    Swal.fire("Algo salio mal")
+                    Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
                 }
             }
         })

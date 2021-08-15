@@ -27,7 +27,11 @@ const CardTable = () => {
 
             setMsg(msg.data.Message)
         } catch (error) {
-            Swal.fire("Algo salio mal")
+            Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
         }   
     }
 
@@ -40,7 +44,11 @@ const CardTable = () => {
             });
             return `${data.data.User.name}`
         } catch (error) {
-            Swal.fire("Algo salio mal")
+            Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
         }
     }
 

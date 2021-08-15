@@ -49,7 +49,11 @@ const CardUserPriv = () => {
       })
       
     } catch (error) {
-      Swal.fire("Algo salio mal")
+      Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
     }
   }
 

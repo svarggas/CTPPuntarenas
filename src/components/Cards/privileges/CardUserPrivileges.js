@@ -22,7 +22,11 @@ const CardTable = ({ color }) => {
       });
       setPrivList(list.data.result)
     } catch (error) {
-      Swal.fire("Algo salio mal")
+      Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
     }
   }
 
@@ -36,7 +40,11 @@ const CardTable = ({ color }) => {
       loadPrivileges()
       Swal.fire(msgReturned.data)
     } catch (error) {
-      Swal.fire("Algo salio mal")
+      Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
     }
   }
 

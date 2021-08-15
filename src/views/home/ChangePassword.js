@@ -43,7 +43,11 @@ const ChangePassword = () => {
 
           Swal.fire(msgReturned.data);
           
-        } catch (error) { Swal.fire("Algo salio mal") }
+        } catch (error) { Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+) }
 
       } else {
 

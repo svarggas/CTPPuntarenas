@@ -30,7 +30,11 @@ const CardAdd = () => {
                 history.push({ pathname: '/privileges/Handler', search: `?user=${urlParams.get('user')}` })
 
             } catch (error) {
-                Swal.fire("Algo salio mal")
+                Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
             }
         } else {
             Swal.fire("No se ha seleccionado ningun privilegio apra ser asignado")

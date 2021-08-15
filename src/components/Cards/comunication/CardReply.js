@@ -31,7 +31,11 @@ const CardTable = () => {
             msg.data.Message.title = 'Re: ' + msg.data.Message.title
             setMsg(msg.data.Message)
         } catch (error) {
-            Swal.fire("Algo salio mal")
+            Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
         }   
     }
 
@@ -44,7 +48,11 @@ const CardTable = () => {
             });
             return `${data.data.User.name}`
         } catch (error) {
-            Swal.fire("Algo salio mal")
+            Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
         }
     }
 
@@ -82,7 +90,11 @@ const CardTable = () => {
                             history.push({ pathname: 'Inbox' })
                         }
                     } catch (error) {
-                        Swal.fire("Algo salio mal")
+                        Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
                     }
                 }
             })

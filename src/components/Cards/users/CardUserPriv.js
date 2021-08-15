@@ -20,7 +20,11 @@ const CardUserPriv = () => {
       });
       setUserData(data.data.User[0])
     } catch (error) {
-      Swal.fire("Algo salio mal")
+      Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
     }
   }
 
@@ -64,7 +68,11 @@ const CardUserPriv = () => {
       Swal.fire('Información actualizada');
       
     } catch (error) {
-      Swal.fire("Algo salio mal")
+      Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
     }
   }
 
@@ -86,7 +94,11 @@ const CardUserPriv = () => {
       Swal.fire("El estado del usario se cambio con exito")
       
     } catch (error) {
-      Swal.fire("Algo salio mal")
+      Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
     }
 
   }
@@ -105,7 +117,11 @@ const CardUserPriv = () => {
       })
 
     } catch (error) {
-      Swal.fire("Algo salio mal")
+      Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
     }
 
   }

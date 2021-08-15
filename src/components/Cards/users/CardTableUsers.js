@@ -28,7 +28,11 @@ const CardTable = ({ color }) => {
       });
       setUserList(list.data.User)
     } catch (error) {
-      Swal.fire("Algo salio mal")
+      Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
     }
   }
 

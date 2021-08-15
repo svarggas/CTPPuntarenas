@@ -65,7 +65,11 @@ export const ReportAttendance = apiURL => {
             });
             return (list.data.Attendance)
         } catch (error) {
-            Swal.fire("Algo salio mal")
+            Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
         }
     }
 
@@ -92,7 +96,11 @@ export const ReportAttendance = apiURL => {
             return result
 
         } catch (error) {
-            Swal.fire("Algo salio mal")
+            Swal.fire(
+  '¡Error!',
+  'Algo salio mal al intentar la operación.',
+  'error'
+)
         }
     }
 
