@@ -36,7 +36,8 @@ const LogIn = () => {
           await setUser({
             "apiURL": domain,
             "data": loginUser.data.userData._doc,
-            "token": loginUser.data.userData.token
+            "token": loginUser.data.userData.token,
+            "privileges": loginUser.data.userData.privileges.map( result => result.name )
           })
           setTimeout(() => goTo('/home/'),1000);
         }

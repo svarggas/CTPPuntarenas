@@ -21,6 +21,7 @@ const App = () => {
     let returnValue = {
       apiURL: "https://ctp-puntarenas-api.herokuapp.com/api",
       data: {},
+      privileges: [],
       logged: false
     }
 
@@ -29,6 +30,7 @@ const App = () => {
       returnValue = {
         apiURL: "https://ctp-puntarenas-api.herokuapp.com/api",
         data: decodedData.user,
+        privileges: decodedData.privileges.map(priv => priv.name),
         logged: true
       }
     }

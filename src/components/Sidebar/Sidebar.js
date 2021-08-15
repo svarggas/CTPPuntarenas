@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import SharedContext from "../../SharedContext";
 
 const SideBar = props => {
 
   const [collapseShow, setCollapseShow] = useState("hidden");
+  const { user } = useContext(SharedContext)
+
+  const checkPriv = privilege => user.privileges.includes(privilege)
 
   return (
     <>
@@ -25,7 +29,7 @@ const SideBar = props => {
           >
             <i className="fas fa-school"></i> CTP. Puntarenas
           </p>
-          
+
           {/* Collapse */}
           <div
             className={
@@ -144,163 +148,195 @@ const SideBar = props => {
               </li>
             </ul>
 
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
+            {
 
-            {/* Heading */}
-            <h6 className="md:min-w-full text-gray-600 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Funcionarios
-            </h6>
+              !checkPriv('users') ? null :
 
-            {/* Funcionarios */}
-            <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/users/List?s=users") !== -1
-                      ? "text-blue-500 hover:text-blue-600"
-                      : "text-gray-800 hover:text-gray-600")
-                  }
-                  to="/users/List?s=users"
-                >
-                  <i
-                    className={
-                      "fas fa-users mr-2 text-sm " +
-                      (window.location.href.indexOf("/users/List?s=users") !== -1
-                        ? "opacity-75"
-                        : "text-gray-400")
-                    }
-                  ></i>{" "}
-                  Lista
-                </Link>
-              </li>
+                <>
+                  {/* Divider */}
+                  <hr className="my-4 md:min-w-full" />
 
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/users/Add") !== -1
-                      ? "text-blue-500 hover:text-blue-600"
-                      : "text-gray-800 hover:text-gray-600")
-                  }
-                  to="/users/Add"
-                >
-                  <i
-                    className={
-                      "fas fa-user-plus mr-2 text-sm " +
-                      (window.location.href.indexOf("/users/Add") !== -1
-                        ? "opacity-75"
-                        : "text-gray-400")
-                    }
-                  ></i>{" "}
-                  Agregar
-                </Link>
-              </li>
-            </ul>
+                  {/* Heading */}
+                  <h6 className="md:min-w-full text-gray-600 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                    Funcionarios
+                  </h6>
 
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
+                  {/* Funcionarios */}
+                  <ul className="md:flex-col md:min-w-full flex flex-col list-none">
+                    <li className="items-center">
+                      <Link
+                        className={
+                          "text-xs uppercase py-3 font-bold block " +
+                          (window.location.href.indexOf("/users/List?s=users") !== -1
+                            ? "text-blue-500 hover:text-blue-600"
+                            : "text-gray-800 hover:text-gray-600")
+                        }
+                        to="/users/List?s=users"
+                      >
+                        <i
+                          className={
+                            "fas fa-users mr-2 text-sm " +
+                            (window.location.href.indexOf("/users/List?s=users") !== -1
+                              ? "opacity-75"
+                              : "text-gray-400")
+                          }
+                        ></i>{" "}
+                        Lista
+                      </Link>
+                    </li>
 
-            {/* Heading */}
-            <h6 className="md:min-w-full text-gray-600 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Asistencia
-            </h6>
+                    <li className="items-center">
+                      <Link
+                        className={
+                          "text-xs uppercase py-3 font-bold block " +
+                          (window.location.href.indexOf("/users/Add") !== -1
+                            ? "text-blue-500 hover:text-blue-600"
+                            : "text-gray-800 hover:text-gray-600")
+                        }
+                        to="/users/Add"
+                      >
+                        <i
+                          className={
+                            "fas fa-user-plus mr-2 text-sm " +
+                            (window.location.href.indexOf("/users/Add") !== -1
+                              ? "opacity-75"
+                              : "text-gray-400")
+                          }
+                        ></i>{" "}
+                        Agregar
+                      </Link>
+                    </li>
+                  </ul>
+                </>
 
-            {/* Asistencia */}
-            <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/attendance/Justify") !== -1
-                      ? "text-blue-500 hover:text-blue-600"
-                      : "text-gray-800 hover:text-gray-600")
-                  }
-                  to="/attendance/Justify"
-                >
-                  <i
-                    className={
-                      "fas fa-calendar-check mr-2 text-sm " +
-                      (window.location.href.indexOf("/attendance/Justify") !== -1
-                        ? "opacity-75"
-                        : "text-gray-400")
-                    }
-                  ></i>{" "}
-                  Justificar
-                </Link>
-              </li>
-            </ul>
+            }
 
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
+            {
 
-            {/* Heading */}
-            <h6 className="md:min-w-full text-gray-600 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Reportes
-            </h6>
+              !checkPriv('attendance') ? null :
 
-            {/* Reportes */}
-            <ul className="md:flex-col md:min-w-full flex flex-col list-none">
+                <>
+                  {/* Divider */}
+                  <hr className="my-4 md:min-w-full" />
 
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/reports/List") !== -1
-                      ? "text-blue-500 hover:text-blue-600"
-                      : "text-gray-800 hover:text-gray-600")
-                  }
-                  to="/reports/List"
-                >
-                  <i
-                    className={
-                      "fas fa-list-alt mr-2 text-sm " +
-                      (window.location.href.indexOf("/reports/List") !== -1
-                        ? "opacity-75"
-                        : "text-gray-400")
-                    }
-                  ></i>{" "}
-                  Lista
-                </Link>
-              </li>
+                  {/* Heading */}
+                  <h6 className="md:min-w-full text-gray-600 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                    Asistencia
+                  </h6>
 
-            </ul>
+                  {/* Asistencia */}
+                  <ul className="md:flex-col md:min-w-full flex flex-col list-none">
+                    <li className="items-center">
+                      <Link
+                        className={
+                          "text-xs uppercase py-3 font-bold block " +
+                          (window.location.href.indexOf("/attendance/Justify") !== -1
+                            ? "text-blue-500 hover:text-blue-600"
+                            : "text-gray-800 hover:text-gray-600")
+                        }
+                        to="/attendance/Justify"
+                      >
+                        <i
+                          className={
+                            "fas fa-calendar-check mr-2 text-sm " +
+                            (window.location.href.indexOf("/attendance/Justify") !== -1
+                              ? "opacity-75"
+                              : "text-gray-400")
+                          }
+                        ></i>{" "}
+                        Justificar
+                      </Link>
+                    </li>
+                  </ul>
+                </>
+            }
 
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
+            {
 
-            {/* Heading */}
-            <h6 className="md:min-w-full text-gray-600 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Privilegios
-            </h6>
+              !checkPriv('reports') ? null :
 
-            {/* Privilegios */}
-            <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-              
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/users/List?s=privileges") !== -1
-                      ? "text-blue-500 hover:text-blue-600"
-                      : "text-gray-800 hover:text-gray-600")
-                  }
-                  to="/users/List?s=privileges"
-                >
-                  <i
-                    className={
-                      "fas fa-tools mr-2 text-sm " +
-                      (window.location.href.indexOf("/users/List?s=privileges") !== -1
-                        ? "opacity-75"
-                        : "text-gray-400")
-                    }
-                  ></i>{" "}
-                  Administrar
-                </Link>
-              </li>
+                <>
 
-            </ul>
+                  {/* Divider */}
+                  <hr className="my-4 md:min-w-full" />
+
+                  {/* Heading */}
+                  <h6 className="md:min-w-full text-gray-600 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                    Reportes
+                  </h6>
+
+                  {/* Reportes */}
+                  <ul className="md:flex-col md:min-w-full flex flex-col list-none">
+
+                    <li className="items-center">
+                      <Link
+                        className={
+                          "text-xs uppercase py-3 font-bold block " +
+                          (window.location.href.indexOf("/reports/List") !== -1
+                            ? "text-blue-500 hover:text-blue-600"
+                            : "text-gray-800 hover:text-gray-600")
+                        }
+                        to="/reports/List"
+                      >
+                        <i
+                          className={
+                            "fas fa-list-alt mr-2 text-sm " +
+                            (window.location.href.indexOf("/reports/List") !== -1
+                              ? "opacity-75"
+                              : "text-gray-400")
+                          }
+                        ></i>{" "}
+                        Lista
+                      </Link>
+                    </li>
+
+                  </ul>
+                </>
+            }
+
+            {
+
+              !checkPriv('privileges') ? null :
+
+                <>
+
+                  {/* Divider */}
+                  <hr className="my-4 md:min-w-full" />
+
+                  {/* Heading */}
+                  <h6 className="md:min-w-full text-gray-600 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                    Privilegios
+                  </h6>
+
+                  {/* Privilegios */}
+                  <ul className="md:flex-col md:min-w-full flex flex-col list-none">
+
+                    <li className="items-center">
+                      <Link
+                        className={
+                          "text-xs uppercase py-3 font-bold block " +
+                          (window.location.href.indexOf("/users/List?s=privileges") !== -1
+                            ? "text-blue-500 hover:text-blue-600"
+                            : "text-gray-800 hover:text-gray-600")
+                        }
+                        to="/users/List?s=privileges"
+                      >
+                        <i
+                          className={
+                            "fas fa-tools mr-2 text-sm " +
+                            (window.location.href.indexOf("/users/List?s=privileges") !== -1
+                              ? "opacity-75"
+                              : "text-gray-400")
+                          }
+                        ></i>{" "}
+                        Administrar
+                      </Link>
+                    </li>
+
+                  </ul>
+
+                </>
+            }
 
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
@@ -312,7 +348,7 @@ const SideBar = props => {
 
             {/* Utilities */}
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-              
+
               <li className="items-center">
                 <Link
                   className={
@@ -337,9 +373,9 @@ const SideBar = props => {
 
               <li className="items-center">
                 <button type="button" onClick={() => props.logout()}
-                  className={ "text-xs uppercase py-3 font-bold block text-gray-800 hover:text-gray-600" } >
+                  className={"text-xs uppercase py-3 font-bold block text-gray-800 hover:text-gray-600"} >
                   <i
-                    className={ "fas fa-sign-out-alt mr-2 text-sm text-gray-400" }
+                    className={"fas fa-sign-out-alt mr-2 text-sm text-gray-400"}
                   ></i>{" "}
                   Log out
                 </button>
