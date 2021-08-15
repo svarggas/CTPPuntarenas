@@ -52,7 +52,7 @@ const Authenticated = () => {
       <Sidebar logout={logout}  />
       <div className="relative md:ml-64 bg-gray-200">
         <Header name={ getPageName() }  />
-        <div className="px-4 md:px-10 mx-auto w-full -m-24">
+        <div className="px-4 md:px-10 mx-auto w-full" style={{ height: '85vh' }}>
           <Switch>
 
             <Route path="/home/" exact component={Home} />
@@ -77,8 +77,8 @@ const Authenticated = () => {
             <Route path="/reports/Report" exact component={Report} />
             
           </Switch>
-          <FooterAdmin />
         </div>
+        <FooterAdmin className="bottom-0" />
       </div>
     </>
   )

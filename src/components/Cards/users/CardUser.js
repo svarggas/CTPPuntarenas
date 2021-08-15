@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext } from "react";
 import jwtDecode from 'jwt-decode';
 import SharedContext from "../../../SharedContext";
+import Swal from 'sweetalert2'
 
 const CardUser = () => {
 
@@ -48,10 +49,10 @@ const CardUser = () => {
       button.classList.add('bg-blue-500');
       button.classList.remove('bg-gray-900');
 
-      alert('Información actualizada');
+      Swal.fire('Información actualizada');
       
     } catch (error) {
-      alert("Algo salio mal")
+      Swal.fire("Algo salio mal")
     }
   }
 

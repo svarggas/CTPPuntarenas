@@ -19,7 +19,7 @@ const CardMensajeFuncionarios = () => {
       });
       setUserList(list.data.User)
     } catch (error) {
-      alert("Algo salio mal")
+      Swal.fire("Algo salio mal")
     }
   }
 
@@ -59,7 +59,7 @@ const CardMensajeFuncionarios = () => {
                           history.push({ pathname: '/' })
                       }
                   } catch (error) {
-                      alert("Algo salio mal")
+                      Swal.fire("Algo salio mal")
                   }
               }
           })
@@ -72,7 +72,10 @@ const CardMensajeFuncionarios = () => {
       }
   }
 
-  useEffect(() => { loadUsers() }, [])
+  useEffect(() => { 
+    loadUsers()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>

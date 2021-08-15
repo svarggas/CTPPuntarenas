@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios"
+import Swal from 'sweetalert2'
 import SharedContext from "../../../SharedContext";
 
 const CardTable = ({ color }) => {
@@ -27,11 +28,14 @@ const CardTable = ({ color }) => {
       });
       setUserList(list.data.User)
     } catch (error) {
-      alert("Algo salio mal")
+      Swal.fire("Algo salio mal")
     }
   }
 
-  useEffect(() => { loadUsers() }, [])
+  useEffect(() => { 
+    loadUsers() 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>

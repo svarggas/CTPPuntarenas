@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { Link, useHistory } from "react-router-dom";
+import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios"
+import Swal from 'sweetalert2'
 import SharedContext from "../../../SharedContext";
 
 const CardAdd = () => {
@@ -17,7 +17,7 @@ const CardAdd = () => {
             try {
                 
                 const endpoint = `privilege/add`
-                const msgReturned = await axios({
+                await axios({
                     method: 'POST',
                     url: `${user.apiURL}/${endpoint}`,
                     data: {
@@ -26,14 +26,14 @@ const CardAdd = () => {
                     }
                 });
 
-                alert("Privilegio agregado")
+                Swal.fire("Privilegio agregado")
                 history.push({ pathname: '/privileges/Handler', search: `?user=${urlParams.get('user')}` })
 
             } catch (error) {
-                alert("Algo salio mal")
+                Swal.fire("Algo salio mal")
             }
         } else {
-            alert("No se ha seleccionado ningun privilegio apra ser asignado")
+            Swal.fire("No se ha seleccionado ningun privilegio apra ser asignado")
         }
     }
 

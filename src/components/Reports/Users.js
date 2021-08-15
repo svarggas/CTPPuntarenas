@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Swal from 'sweetalert2'
 
 export const ReportUsers = apiURL => {
 
@@ -46,7 +47,7 @@ export const ReportUsers = apiURL => {
             });
             return (list.data.User)
         } catch (error) {
-            alert("Algo salio mal")
+            Swal.fire("Algo salio mal")
         }
     }
 

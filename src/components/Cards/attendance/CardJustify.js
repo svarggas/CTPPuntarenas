@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios"
+import Swal from 'sweetalert2'
 import SharedContext from "../../../SharedContext";
 
 const CardTable = () => {
@@ -16,11 +17,14 @@ const CardTable = () => {
         });
         setUserList(list.data.User)
       } catch (error) {
-        alert("Algo salio mal")
+        Swal.fire("Algo salio mal")
       }
     }
   
-    useEffect(() => { loadUsers() }, [])
+    useEffect(() => { 
+      loadUsers()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const justifyAbsence = async () => {
     
@@ -41,10 +45,10 @@ const CardTable = () => {
           });
     
           console.log(justify)
-          alert('Información actualizada');
+          Swal.fire('Información actualizada');
           
         } catch (error) {
-          alert("Algo salio mal")
+          Swal.fire("Algo salio mal")
         }
     }
 

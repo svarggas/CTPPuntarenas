@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
-
+import Swal from 'sweetalert2'
 import SharedContext from "../../../SharedContext";
 
 const CardTable = () => {
@@ -27,7 +27,7 @@ const CardTable = () => {
 
             setMsg(msg.data.Message)
         } catch (error) {
-            alert(error)
+            Swal.fire("Algo salio mal")
         }   
     }
 
@@ -40,11 +40,14 @@ const CardTable = () => {
             });
             return `${data.data.User.name}`
         } catch (error) {
-            alert("Algo salio mal")
+            Swal.fire("Algo salio mal")
         }
     }
 
-    useEffect(() => { loadMessage() }, [])
+    useEffect(() => { 
+        loadMessage() 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
   return (
     <>

@@ -16,7 +16,7 @@ export default function FooterSmall(props) {
             <div className="w-full md:w-12/12 px-4">
               <div className="text-sm text-gray-600 font-semibold py-1 text-center md:text-center">
                 <p className="text-white hover:text-gray-400 text-sm font-semibold py-1">
-                  Copyright © {new Date().getFullYear()} by XXX.
+                  Copyright © {new Date().getFullYear()} by KKS Development team.
                 </p>
               </div>
             </div>

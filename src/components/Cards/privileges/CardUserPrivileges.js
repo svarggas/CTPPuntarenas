@@ -1,7 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import axios from "axios"
+import Swal from 'sweetalert2'
 import SharedContext from "../../../SharedContext";
 
 const CardTable = ({ color }) => {
@@ -21,7 +22,7 @@ const CardTable = ({ color }) => {
       });
       setPrivList(list.data.result)
     } catch (error) {
-      alert("Algo salio mal")
+      Swal.fire("Algo salio mal")
     }
   }
 
@@ -33,15 +34,18 @@ const CardTable = ({ color }) => {
         url: `${user.apiURL}/${endpoint}`
       });
       loadPrivileges()
-      alert(msgReturned.data)
+      Swal.fire(msgReturned.data)
     } catch (error) {
-      alert("Algo salio mal")
+      Swal.fire("Algo salio mal")
     }
   }
 
   const addPriv = () => history.push({ pathname: '/privileges/Add', search: `?user=${urlParams.get('user')}` })
 
-  useEffect(() => { loadPrivileges() }, [])
+  useEffect(() => { 
+    loadPrivileges()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>

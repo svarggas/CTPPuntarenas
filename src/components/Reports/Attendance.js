@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Swal from 'sweetalert2'
 
 export const ReportAttendance = apiURL => {
 
@@ -64,7 +65,7 @@ export const ReportAttendance = apiURL => {
             });
             return (list.data.Attendance)
         } catch (error) {
-            alert("Algo salio mal")
+            Swal.fire("Algo salio mal")
         }
     }
 
@@ -91,7 +92,7 @@ export const ReportAttendance = apiURL => {
             return result
 
         } catch (error) {
-            alert("Algo salio mal")
+            Swal.fire("Algo salio mal")
         }
     }
 

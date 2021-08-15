@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import SharedContext from "../../../SharedContext";
 import axios from "axios";
+import Swal from 'sweetalert2'
 
 const CardUserPriv = () => {
 
@@ -40,7 +41,7 @@ const CardUserPriv = () => {
         }
       });
   
-      alert('Usuario creado');
+      Swal.fire('Usuario creado');
   
       history.push({
         pathname: '/users/List',
@@ -48,7 +49,7 @@ const CardUserPriv = () => {
       })
       
     } catch (error) {
-      alert("Algo salio mal")
+      Swal.fire("Algo salio mal")
     }
   }
 

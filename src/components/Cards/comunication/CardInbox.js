@@ -36,7 +36,7 @@ const CardTable = ({ color }) => {
 
             setMsgList(list.data.Inbox)
         } catch (error) {
-            alert(error)
+            Swal.fire("Algo salio mal")
         }   
     }
 
@@ -49,7 +49,7 @@ const CardTable = ({ color }) => {
             });
             return `${data.data.User.name}`
         } catch (error) {
-            alert("Algo salio mal")
+            Swal.fire("Algo salio mal")
         }
     }
 
@@ -69,7 +69,7 @@ const CardTable = ({ color }) => {
                     loadMessages()
                     Swal.fire('¡Eliminado!', '', 'success')
                 } catch (error) {
-                    alert("Algo salio mal")
+                    Swal.fire("Algo salio mal")
                 }
             }
         })
@@ -88,7 +88,10 @@ const CardTable = ({ color }) => {
         return `${day}-${month}-${year}`
     }
 
-    useEffect(() => { loadMessages() }, [])
+    useEffect(() => { 
+        loadMessages()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
   return (
     <>

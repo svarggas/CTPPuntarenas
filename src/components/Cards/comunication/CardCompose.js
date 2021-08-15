@@ -19,7 +19,7 @@ const CardTable = () => {
         });
         setUserList(list.data.User)
       } catch (error) {
-        alert("Algo salio mal")
+        Swal.fire("Algo salio mal")
       }
     }
 
@@ -55,7 +55,7 @@ const CardTable = () => {
                             history.push({ pathname: 'Inbox' })
                         }
                     } catch (error) {
-                        alert("Algo salio mal")
+                        Swal.fire("Algo salio mal")
                     }
                 }
             })
@@ -68,7 +68,10 @@ const CardTable = () => {
         }
     }
   
-    useEffect(() => { loadUsers() }, [])
+    useEffect(() => { 
+        loadUsers() 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
   return (
     <>

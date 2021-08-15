@@ -31,7 +31,7 @@ const CardTable = () => {
             msg.data.Message.title = 'Re: ' + msg.data.Message.title
             setMsg(msg.data.Message)
         } catch (error) {
-            alert(error)
+            Swal.fire("Algo salio mal")
         }   
     }
 
@@ -44,7 +44,7 @@ const CardTable = () => {
             });
             return `${data.data.User.name}`
         } catch (error) {
-            alert("Algo salio mal")
+            Swal.fire("Algo salio mal")
         }
     }
 
@@ -82,7 +82,7 @@ const CardTable = () => {
                             history.push({ pathname: 'Inbox' })
                         }
                     } catch (error) {
-                        alert("Algo salio mal")
+                        Swal.fire("Algo salio mal")
                     }
                 }
             })
@@ -95,7 +95,10 @@ const CardTable = () => {
         }
     }
 
-    useEffect(() => { loadMessage() }, [])
+    useEffect(() => { 
+        loadMessage()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
   return (
     <>

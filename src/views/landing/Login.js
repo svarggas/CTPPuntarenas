@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import axios from 'axios';
+import Swal from 'sweetalert2'
 import SharedContext from "../../SharedContext";
 
 const LogIn = () => {
@@ -26,10 +27,10 @@ const LogIn = () => {
           }
         });
 
-        if(!loginUser.data.userData) alert(loginUser.data)
+        if(!loginUser.data.userData) Swal.fire(loginUser.data)
         if(loginUser.data.userData && 
           loginUser.data.userData._doc && 
-          !loginUser.data.userData._doc.status) alert("El usuario se encuentra inactivo")
+          !loginUser.data.userData._doc.status) Swal.fire("El usuario se encuentra inactivo")
 
         if(loginUser.data.userData && loginUser.data.userData._doc && loginUser.data.userData._doc.status) {
           localStorage.setItem('uid', loginUser.data.userData.token)
@@ -42,7 +43,7 @@ const LogIn = () => {
           setTimeout(() => goTo('/home/'),1000);
         }
         
-      } catch (error) { alert(error) }
+      } catch (error) { Swal.fire("Algo salio mal") }
     }
   }
 
@@ -50,6 +51,7 @@ const LogIn = () => {
 
   useEffect(() => {
     if (user.logged) goTo('/home/');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

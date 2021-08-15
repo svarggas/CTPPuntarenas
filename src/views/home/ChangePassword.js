@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import SharedContext from "../../SharedContext";
 import axios from "axios";
+import Swal from 'sweetalert2'
 
 const ChangePassword = () => {
 
@@ -14,7 +15,7 @@ const ChangePassword = () => {
 
     if(newPassword !== newPasswordConfirm) {
 
-      alert("La contraseña nueva y su confirmación no calzan")
+      Swal.fire("La contraseña nueva y su confirmación no calzan")
 
     } else {
 
@@ -40,13 +41,13 @@ const ChangePassword = () => {
           button.classList.add('bg-blue-500');
           button.classList.remove('bg-gray-900');
 
-          alert(msgReturned.data);
+          Swal.fire(msgReturned.data);
           
-        } catch (error) { alert("Algo salio mal") }
+        } catch (error) { Swal.fire("Algo salio mal") }
 
       } else {
 
-        if(!currentPassword || !newPassword || !newPasswordConfirm) alert("Todos los datos deben ser ingresados")
+        if(!currentPassword || !newPassword || !newPasswordConfirm) Swal.fire("Todos los datos deben ser ingresados")
 
       }
     }

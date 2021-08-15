@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import axios from 'axios';
+import Swal from 'sweetalert2'
 import SharedContext from "../../../SharedContext";
 
 const CardUserPriv = () => {
@@ -19,7 +20,7 @@ const CardUserPriv = () => {
       });
       setUserData(data.data.User[0])
     } catch (error) {
-      alert("Algo salio mal")
+      Swal.fire("Algo salio mal")
     }
   }
 
@@ -60,10 +61,10 @@ const CardUserPriv = () => {
       button.classList.add('bg-blue-500');
       button.classList.remove('bg-gray-900');
 
-      alert('Información actualizada');
+      Swal.fire('Información actualizada');
       
     } catch (error) {
-      alert("Algo salio mal")
+      Swal.fire("Algo salio mal")
     }
   }
 
@@ -82,10 +83,10 @@ const CardUserPriv = () => {
         }
       });
 
-      alert("El estado del usario se cambio con exito")
+      Swal.fire("El estado del usario se cambio con exito")
       
     } catch (error) {
-      alert("Algo salio mal")
+      Swal.fire("Algo salio mal")
     }
 
   }
@@ -104,12 +105,15 @@ const CardUserPriv = () => {
       })
 
     } catch (error) {
-      alert("Algo salio mal")
+      Swal.fire("Algo salio mal")
     }
 
   }
 
-  useEffect(() => { loadUser() }, [updateUser, changeStatus])
+  useEffect(() => { 
+    loadUser()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateUser, changeStatus])
 
   return (
     <>
