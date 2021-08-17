@@ -10,7 +10,7 @@ export default function Navbar() {
           <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
             <Link to="/"
               className="text-white text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-no-wrap uppercase">
-              CTP Puntarenas
+              Liceo Antonio Obando Chan
             </Link>
           </div>
         </div>

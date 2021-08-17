@@ -27,7 +27,7 @@ const SideBar = props => {
           <p
             className="md:block text-center md:pb-2 text-gray-700 mr-0 inline-block whitespace-no-wrap text-sm uppercase font-bold p-4 px-0"
           >
-            <i className="fas fa-school"></i> CTP. Puntarenas
+            <i className="fas fa-school"></i> Liceo Antonio <br/> Obando Chan
           </p>
 
           {/* Collapse */}
@@ -45,7 +45,7 @@ const SideBar = props => {
                     className="md:block text-left md:pb-2 text-gray-700 mr-0 inline-block whitespace-no-wrap text-sm uppercase font-bold p-4 px-0"
                     to="/home/"
                   >
-                    <i className="fas fa-school"></i> CTP. Puntarenas
+                    <i className="fas fa-school"></i> Liceo Antonio <br/> Obando Chan
                   </p>
                 </div>
                 <div className="w-6/12 flex justify-end">
