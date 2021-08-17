@@ -28,14 +28,14 @@ export default function Footer() {
             <div className="w-full lg:w-6/12 px-4">
               <h4 className="text-3xl font-semibold">¡Mantengamonos en contacto!</h4>
               <h5 className="text-lg mt-0 mb-2 text-gray-700">
-                Email: ctp.depuntarenas@mep.go.cr
+                Email: lic.antonioobandochan@mep.go.cr
               </h5>
               <div className="mt-6 lg:mb-0 mb-6">
                 <button
                   className="bg-white text-blue-600 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2"
                   type="button"
                 >
-                    <a href="https://www.facebook.com/ctppuntarenasoficial/">
+                    <a href="https://www.facebook.com/Liceo-Antonio-Obando-Chan-157057644356518/">
                         <i className="fab fa-facebook-square"></i>
                     </a>
                 </button>
@@ -50,7 +50,7 @@ export default function Footer() {
                   <ul className="list-unstyled">
                     <li>
                       <p className="text-gray-700 font-semibold block pb-2 text-sm">
-                        Tél. 2663 0274
+                        Tél. 2660 0640
                       </p>
                     </li>
                   </ul>
@@ -62,7 +62,7 @@ export default function Footer() {
                   <ul className="list-unstyled">
                     <li>
                       <p className="text-gray-700 font-semibold block pb-2 text-sm">
-                        Provincia de Puntarenas, Barranca, El Roble 1, 17
+                        Provincia de Puntarenas, Barranca, Riojalandia, C. 226.
                       </p>
                     </li>
                   </ul>

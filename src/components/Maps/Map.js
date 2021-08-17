@@ -11,7 +11,8 @@ const MapExampleScript = withScriptjs(
   withGoogleMap((props) => (
     <GoogleMap
       defaultZoom={12}
-      defaultCenter={{ lat: 9.9666628, lng: -84.83333 }}
+      
+      defaultCenter={{ lat: 9.9789549, lng: -84.7208052 }}
       defaultOptions={{
         scrollwheel: false,
         styles: [

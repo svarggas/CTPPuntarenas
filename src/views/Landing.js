@@ -284,7 +284,7 @@ export default function Landing() {
 
           <div className="container mx-auto px-4 lg:pt-24 lg:pb-24">
             <h3 className="text-3xl mb-2 font-semibold leading-normal text-white" >Localización</h3>
-            <h4 className="text-white">17, El Roble 1, Provincia de Puntarenas, Barranca</h4><br/>
+            <h4 className="text-white">Provincia de Puntarenas, Barranca, Riojalandia, C. 226.</h4><br/>
             <GoogleMap/>
           </div>
         </section> 
