@@ -28,10 +28,10 @@ const CardTable = () => {
             setMsg(msg.data.Message)
         } catch (error) {
             Swal.fire(
-  '¡Error!',
-  'Algo salio mal al intentar la operación.',
-  'error'
-)
+                '¡Error!',
+                'Algo salio mal al intentar la operación.',
+                'error'
+            )
         }   
     }
 
@@ -45,16 +45,35 @@ const CardTable = () => {
             return `${data.data.User.name}`
         } catch (error) {
             Swal.fire(
-  '¡Error!',
-  'Algo salio mal al intentar la operación.',
-  'error'
-)
+                '¡Error!',
+                'Algo salio mal al intentar la operación.',
+                'error'
+            )
+        }
+    }
+
+    const updateMessageState = async () => {
+    
+        try {
+
+            const endpoint = `message/seen/${urlParams.get('msg')}`
+            await axios({
+                method: 'PUT',
+                url: `${user.apiURL}/${endpoint}`,
+            });
+            
+        } catch (error) {
+            Swal.fire(
+                '¡Error!',
+                'Algo salio mal al intentar cambiar el estado del mensaje a leido.',
+                'error'
+            )
         }
     }
 
     useEffect(() => { 
-        loadMessage() 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        loadMessage();
+        updateMessageState();
     }, [])
 
   return (
