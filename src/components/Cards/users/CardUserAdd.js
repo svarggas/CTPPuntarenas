@@ -1,13 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import SharedContext from "../../../SharedContext";
 import axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import days from '../../data/days';
 
 const CardUserPriv = () => {
 
   const history = useHistory();
-  const { user } = useContext(SharedContext)
+  const { user } = useContext(SharedContext);
+  const [ userFreeDay, setUserFreeDay ] = useState(0);
 
   const createUser = async () => {
 
@@ -37,7 +39,7 @@ const CardUserPriv = () => {
           status: true,
           comments: "-",
           other: other,
-          free_day: 1
+          free_day: userFreeDay
         }
       });
   
@@ -50,10 +52,10 @@ const CardUserPriv = () => {
       
     } catch (error) {
       Swal.fire(
-  '¡Error!',
-  'Algo salio mal al intentar la operación.',
-  'error'
-)
+        '¡Error!',
+        'Algo salio mal al intentar la operación.',
+        'error'
+      )
     }
   }
 
@@ -66,11 +68,11 @@ const CardUserPriv = () => {
                 Por favor complete la siguiente información del funcionario
             </h6>
             <div>
-                <button
-                    className="bg-green-500 text-white active:bg-green-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                    type="button" onClick={() => createUser()} >
-                    Agregar
-                </button>
+              <button
+                className="bg-green-500 text-white active:bg-green-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                type="button" onClick={() => createUser()} >
+                Agregar
+              </button>
             </div>
           </div>
         </div>
@@ -119,7 +121,7 @@ const CardUserPriv = () => {
                     className="block uppercase text-gray-700 text-xs font-bold mb-2"
                     htmlFor="name"
                   >
-                    Nombre compelto
+                    Nombre completo
                   </label>
                   <input
                     type="text"
@@ -217,6 +219,31 @@ const CardUserPriv = () => {
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                     rows="4" id="other" name="other"
                   ></textarea>
+                </div>
+              </div>
+              <div className="w-full lg:w-12/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                    htmlFor="freeday"
+                  >
+                    Día Libre
+                  </label>
+                  <select className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white 
+                    rounded text-sm shadow focus:outline-none focus:shadow-outline w-full 
+                    ease-linear transition-all duration-150"
+                    id="freeday" name="freeday" 
+                    defaultValue={userFreeDay}
+                    onChange={ e => setUserFreeDay(e.target.value) }
+                  >
+                    {
+                      days.map( day => {
+                        return (
+                          <option value={ day.id } key={ day.id } > { day.name } </option>
+                        )
+                      })
+                    }
+                  </select>
                 </div>
               </div>
             </div>

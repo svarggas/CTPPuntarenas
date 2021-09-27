@@ -34,7 +34,8 @@ import SharedContext from "../SharedContext";
 const Authenticated = () => {
 
   const { setUser } = useContext(SharedContext);
-  const history = useHistory()
+  const history = useHistory();
+  const arrPagesLarge = ['Mi Perfil', 'Redactar mensaje', 'Agregar funcionario', 'Edición de usuario'];
 
   const logout = () => {
     //Reset defaults
@@ -45,14 +46,21 @@ const Authenticated = () => {
       logged: false
     })
     history.push('/');
-  }
+  };
+
+  const getStyles = () => {
+    if (!arrPagesLarge.includes(getPageName())) return {
+      height: '75vh'
+    } 
+    return null;
+  };
 
   return (
     <>
       <Sidebar logout={logout}  />
-      <div className="relative md:ml-64 bg-gray-200">
+      <div className="relative md:ml-64 bg-gray-200" >
         <Header name={ getPageName() }  />
-        <div className="px-4 md:px-10 mx-auto w-full" style={{ height: '85vh' }}>
+        <div className="px-4 md:px-10 mx-auto w-full" style={getStyles()}>
           <Switch>
 
             <Route path="/home/" exact component={Home} />

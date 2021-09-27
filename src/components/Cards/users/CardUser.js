@@ -1,15 +1,16 @@
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import jwtDecode from 'jwt-decode';
 import SharedContext from "../../../SharedContext";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import days from '../../data/days';
 
 const CardUser = () => {
 
   const { user, setUser } = useContext(SharedContext)
+  const [ userFreeDay, setUserFreeDay ] = useState(user.data.free_day)
 
   const updateUser = async () => {
-
     const button = document.getElementById('btnUpdate')
     button.disabled = true
     button.classList.remove('bg-blue-500');
@@ -39,7 +40,8 @@ const CardUser = () => {
           telephone: telephone,
           email: email,
           other: notes,
-          comments: comments
+          comments: comments,
+          free_day: userFreeDay
         }
       });
 
@@ -53,10 +55,10 @@ const CardUser = () => {
       
     } catch (error) {
       Swal.fire(
-  '¡Error!',
-  'Algo salio mal al intentar la operación.',
-  'error'
-)
+        '¡Error!',
+        'Algo salio mal al intentar la operación.',
+        'error'
+      )
     }
   }
 
@@ -68,10 +70,12 @@ const CardUser = () => {
     const localToken = localStorage.getItem('uid')
     const domain = user.apiURL
     const decodedData = jwtDecode(localToken)
+    console.log(decodedData)
 
     await setUser({
       "apiURL": domain,
       "data": decodedData.user,
+      "privileges": decodedData.privileges.map( result => result.name ),
       "logged": true
     })
 
@@ -241,6 +245,33 @@ const CardUser = () => {
                     rows="4" id="notes" name="notes"
                     defaultValue={ user.data.other ? user.data.other : "" }
                   ></textarea>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap">
+              <div className="w-full lg:w-12/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                    htmlFor="freeday"
+                  >
+                    Día Libre
+                  </label>
+                  <select className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white 
+                    rounded text-sm shadow focus:outline-none focus:shadow-outline w-full 
+                    ease-linear transition-all duration-150"
+                    id="freeday" name="freeday" 
+                    defaultValue={userFreeDay}
+                    onChange={ e => setUserFreeDay(e.target.value) }
+                  >
+                    {
+                      days.map( day => {
+                        return (
+                          <option value={ day.id } key={ day.id } > { day.name } </option>
+                        )
+                      })
+                    }
+                  </select>
                 </div>
               </div>
             </div>

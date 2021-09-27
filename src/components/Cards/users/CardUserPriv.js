@@ -21,10 +21,10 @@ const CardUserPriv = () => {
       setUserData(data.data.User[0])
     } catch (error) {
       Swal.fire(
-  '¡Error!',
-  'Algo salio mal al intentar la operación.',
-  'error'
-)
+        '¡Error!',
+        'Algo salio mal al intentar la operación.',
+        'error'
+      )
     }
   }
 
@@ -62,17 +62,18 @@ const CardUserPriv = () => {
       });
 
       button.disabled = false
-      button.classList.add('bg-blue-500');
+      button.classList.add('bg-green-500');
       button.classList.remove('bg-gray-900');
 
+      loadUser();
       Swal.fire('Información actualizada');
       
     } catch (error) {
       Swal.fire(
-  '¡Error!',
-  'Algo salio mal al intentar la operación.',
-  'error'
-)
+        '¡Error!',
+        'Algo salio mal al intentar la operación.',
+        'error'
+      )
     }
   }
 
@@ -91,14 +92,15 @@ const CardUserPriv = () => {
         }
       });
 
+      loadUser();
       Swal.fire("El estado del usario se cambio con exito")
       
     } catch (error) {
       Swal.fire(
-  '¡Error!',
-  'Algo salio mal al intentar la operación.',
-  'error'
-)
+        '¡Error!',
+        'Algo salio mal al intentar la operación.',
+        'error'
+      )
     }
 
   }
@@ -118,18 +120,18 @@ const CardUserPriv = () => {
 
     } catch (error) {
       Swal.fire(
-  '¡Error!',
-  'Algo salio mal al intentar la operación.',
-  'error'
-)
+        '¡Error!',
+        'Algo salio mal al intentar la operación.',
+        'error'
+      )
     }
 
   }
 
   useEffect(() => { 
-    loadUser()
+    loadUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateUser, changeStatus])
+  }, [])
 
   return (
     <>
