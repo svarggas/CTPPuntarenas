@@ -22,39 +22,49 @@ const CardUserPriv = () => {
       email = document.getElementById('email').value,
       other = document.getElementById('other').value
   
-    try {
-      const endpoint = `user/register`
-      await axios({
-        method: 'POST',
-        url: `${user.apiURL}/${endpoint}`,
-        data: {
-          user: _user,
-          password: _user,
-          identification: identification,
-          name: name,
-          address: address,
-          cellphone: cellphone,
-          telephone: telephone,
-          email: email,
-          status: true,
-          comments: "-",
-          other: other,
-          free_day: userFreeDay
-        }
-      });
-  
-      Swal.fire('Usuario creado');
-  
-      history.push({
-        pathname: '/users/List',
-        search: '?s=users'
-      })
-      
-    } catch (error) {
+    if ( _user && identification && name && address && cellphone && telephone && email && other  ) {
+        
+      try {
+        const endpoint = `user/register`
+        await axios({
+          method: 'POST',
+          url: `${user.apiURL}/${endpoint}`,
+          data: {
+            user: _user,
+            password: _user,
+            identification: identification,
+            name: name,
+            address: address,
+            cellphone: cellphone,
+            telephone: telephone,
+            email: email,
+            status: true,
+            comments: "-",
+            other: other,
+            free_day: userFreeDay
+          }
+        });
+    
+        Swal.fire('Usuario creado');
+    
+        history.push({
+          pathname: '/users/List',
+          search: '?s=users'
+        })
+        
+      } catch (error) {
+        Swal.fire(
+          '¡Error!',
+          'Algo salio mal al intentar la operación.',
+          'error'
+        )
+      }
+    
+    } else {
       Swal.fire(
-        '¡Error!',
-        'Algo salio mal al intentar la operación.',
-        'error'
+        '¡Alto!',
+        'Es necesario completar todos los espacios',
+        'warning'
       )
     }
   }
